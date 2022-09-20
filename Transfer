@@ -1,0 +1,133 @@
+pragma solidity ^0.8.7;
+
+contract Perevod{
+
+    //Структура юзеров
+    struct User{
+        address login; //Адрес
+        bytes32 password; //Пароль
+        bool check_admin; //Проверка на админа
+    }
+
+    //Структура категорий
+    struct Category{
+        uint id_cat; //ID категорий
+        string name_cat; //Название категории
+    }
+
+    //Структура шаблонов
+    struct Sample{
+        uint id_samp; //ID шаблона
+        uint id_cat; //ID категории
+        string name_samp; //Название шаблона
+        uint sum; //Сумма шаблона
+    }
+
+    struct Translate{
+        uint id_trans;
+        uint id_cat;
+        address sender;
+        address recipient;
+        uint sum;
+        string code_word;
+        string description;
+        bool secure;
+        bool admin_answer;
+        bool polz_confrim;
+        bool end;
+    }
+
+    //Создание массивов
+    mapping(address => User[]) public users; //Массив юзеров
+    Category[] public categorys; //Массив категорий
+    Sample[] public samples; //Массив шаблонов
+    Translate[] public translates;
+
+    //Создание стартового варианта решения
+    constructor(){
+        address admin2 = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
+        address polz1 = 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db;
+        address polz2 = 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB;
+        address polz3 = 0x617F2E2fD72FD9D5503197092aC168c91465E7f2;
+        address polz4 = 0x17F6AD8Ef982297579C203069C1DbfFE4348c372;
+        //Админы
+        users[msg.sender].push(User(msg.sender, "1234", true));
+        users[admin2].push(User(admin2, "1234", true));
+        //Пользователи
+        users[polz1].push(User(polz1, "1234", false));
+        users[polz2].push(User(polz2, "1234", false));
+        users[polz3].push(User(polz3, "1234", false));
+        users[polz4].push(User(polz4, "1234", false));
+
+        //Создание категорий
+        categorys.push(Category(categorys.length, "Lichniy perevod"));
+        categorys.push(Category(categorys.length, "Oplata arendi gilya"));
+        categorys.push(Category(categorys.length, "Lichnie vzaimorascheti"));
+
+        //Создание шаблонов
+        //Подарок
+        samples.push(Sample(samples.length, categorys[0].id_cat, "Podarock", 10));
+        samples.push(Sample(samples.length, categorys[0].id_cat, "Podarock", 30));
+        samples.push(Sample(samples.length, categorys[0].id_cat, "Podarock", 50));
+        //Квартплата
+        samples.push(Sample(samples.length, categorys[1].id_cat, "Cvartplata", 70));
+        samples.push(Sample(samples.length, categorys[1].id_cat, "Cvartplata", 90));
+        //Погашение задолжности
+        samples.push(Sample(samples.length, categorys[2].id_cat, "Pogasheniye zadolgnosti", 90));
+    }
+
+    function change_status(address _polz) public{
+        require (users[msg.sender][0].check_admin == true, "You're not an admin!");
+        require (users[_polz][0].check_admin != true, "User is already the admin!");
+        users[_polz][0].check_admin = true;
+    }
+
+    function add_trans(address _recipient, uint _id_cat, string memory _code_word, string memory _description, bool _secure) public payable {
+        require(msg.sender != _recipient, "You can not translate to yourself!");
+        require(categorys.length > _id_cat, "This category does not exist!");
+        if (_secure == true){
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, true, false, false, false));
+        }
+        else{
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, false, true, false, false));
+        }
+    }
+
+    function secure_answer(uint _id_trans, bool answer_admin) public{
+        require(users[msg.sender][0].check_admin == true, "You're not an admin!");
+        require(msg.sender != translates[_id_trans].sender, "You can not confrim translate to yourself!");
+        require(translates[_id_trans].end != true, "Translate is over!");
+        require(translates[_id_trans].admin_answer != true, "Always answer!");
+        if (answer_admin == true){
+            translates[_id_trans].admin_answer = true;
+        }
+        else{
+            translates[_id_trans].admin_answer = true;
+            translates[_id_trans].end = true;
+        }
+        payable(msg.sender).transfer(translates[_id_trans].sum / 10);
+    }
+
+    function recipient_answer(uint _id_trans, string memory _code_word, bool answer_recipient) public payable{
+        require(msg.sender == translates[_id_trans].recipient, "You're not the recepient!");
+        require(translates[_id_trans].end != true, "Always end!");
+        require(translates[_id_trans].admin_answer == true, "Admin don't answer this translate!");
+        require(translates[_id_trans].polz_confrim != true, "You always answer!");
+        require(keccak256(abi.encodePacked((_code_word))) == keccak256(abi.encodePacked((translates[_id_trans].code_word))), "Error!");
+        if (answer_recipient == true){
+            translates[_id_trans].polz_confrim = true;
+            translates[_id_trans].end = true;
+            payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
+        }
+        else{
+            translates[_id_trans].polz_confrim = true;
+            translates[_id_trans].end = true;
+            if (translates[_id_trans].secure == true){
+                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+            }
+            else{
+                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
+            }
+        }
+    }
+}
