@@ -130,4 +130,16 @@ contract Perevod{
             }
         }
     }
+
+    function cancel_trans(uint _id_trans) public{
+        require(msg.sender == translates[_id_trans].sender, "You're not the sender!");
+        require(translates[_id_trans].polz_confrim != true, "It's already late!");
+        require(translates[_id_trans].admin_answer != true, "Admin is already confrim!");
+        if (translates[_id_trans].secure == true){
+            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+        }
+        else{
+            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
+        }
+    }
 }
