@@ -35,6 +35,7 @@ contract Perevod{
         bool admin_answer;
         bool polz_confrim;
         bool end;
+        uint attempts;
     }
 
     //Создание массивов
@@ -86,10 +87,10 @@ contract Perevod{
         require(msg.sender != _recipient, "You can not translate to yourself!");
         require(categorys.length > _id_cat, "This category does not exist!");
         if (_secure == true){
-            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, true, false, false, false));
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, true, false, false, false, 3));
         }
         else{
-            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, false, true, false, false));
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, false, true, false, false, 3));
         }
     }
 
@@ -120,26 +121,17 @@ contract Perevod{
             payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
         }
         else{
-            translates[_id_trans].polz_confrim = true;
-            translates[_id_trans].end = true;
-            if (translates[_id_trans].secure == true){
-                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+            translates[_id_trans].attempts -= 1;
+            if (translates[_id_trans].attempts == 0){
+                translates[_id_trans].polz_confrim = true;
+                translates[_id_trans].end = true;
+                if (translates[_id_trans].secure == true){
+                    payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+                }
+                else{
+                    payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
+                }
             }
-            else{
-                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
-            }
-        }
-    }
-
-    function cancel_trans(uint _id_trans) public{
-        require(msg.sender == translates[_id_trans].sender, "You're not the sender!");
-        require(translates[_id_trans].polz_confrim != true, "It's already late!");
-        require(translates[_id_trans].admin_answer != true, "Admin is already confrim!");
-        if (translates[_id_trans].secure == true){
-            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
-        }
-        else{
-            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
         }
     }
 }
