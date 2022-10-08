@@ -2,6 +2,8 @@ pragma solidity ^0.8.7;
 
 contract Perevod{
 
+    uint amount_admin;      //Счетчик админов
+
     //Структура юзеров
     struct User{
         address login; //Адрес
@@ -23,42 +25,52 @@ contract Perevod{
         uint sum; //Сумма шаблона
     }
 
+    //Структура заявок на становление админом
+    struct ApplicationRole{
+        uint confrims;  //Кол-во оставшихся подтверждений
+        bool end; //Завершено или нет
+    }
+
+    //Стркутра перевода
     struct Translate{
-        uint id_trans;
-        uint id_cat;
-        address sender;
-        address recipient;
-        uint sum;
-        string code_word;
-        string description;
-        bool secure;
-        bool admin_answer;
-        bool polz_confrim;
-        bool end;
-        uint attempts;
+        uint id_trans;  //ID транзакции
+        uint id_cat;    //ID категории
+        address sender; //Адрес отправителя
+        address recipient;  //Адрес получателя
+        uint sum;   //Сумма перевода
+        string code_word;   //Кодовое слово
+        string description; //Описание
+        bool secure;    //Безопасный перевод
+        bool admin_answer;  //Отаетил ли админ
+        bool polz_confrim;  //Ответил ли пользователь
+        bool end;   //Завершена ли транзакция
+        uint attempts;  //Попытки ввода ключевого слова 
     }
 
     //Создание массивов
-    mapping(address => User[]) public users; //Массив юзеров
+    mapping(address => User) public users; //Массив юзеров
+    mapping(address => ApplicationRole) public aplications; //Массив заявок на смену роли
     Category[] public categorys; //Массив категорий
     Sample[] public samples; //Массив шаблонов
-    Translate[] public translates;
+    Translate[] public translates;  //Массив транзакций
 
     //Создание стартового варианта решения
     constructor(){
+        amount_admin = 2;   //По-началу админов 2
+        //Адреса уже зарегестрированных пользователей
         address admin2 = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
         address polz1 = 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db;
         address polz2 = 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB;
         address polz3 = 0x617F2E2fD72FD9D5503197092aC168c91465E7f2;
         address polz4 = 0x17F6AD8Ef982297579C203069C1DbfFE4348c372;
         //Админы
-        users[msg.sender].push(User(msg.sender, "1234", true));
-        users[admin2].push(User(admin2, "1234", true));
+        users[msg.sender] = User(msg.sender, keccak256(abi.encodePacked("1234")), true);
+        users[admin2] = User(admin2, keccak256(abi.encodePacked("1234")), true);
         //Пользователи
-        users[polz1].push(User(polz1, "1234", false));
-        users[polz2].push(User(polz2, "1234", false));
-        users[polz3].push(User(polz3, "1234", false));
-        users[polz4].push(User(polz4, "1234", false));
+        users[polz1] = User(polz1, keccak256(abi.encodePacked("1234")), false);
+        users[polz2] = User(polz2, keccak256(abi.encodePacked("1234")), false);
+        users[polz3] = User(polz3, keccak256(abi.encodePacked("1234")), false);
+        users[polz4] = User(polz4, keccak256(abi.encodePacked("1234")), false);
 
         //Создание категорий
         categorys.push(Category(categorys.length, "Lichniy perevod"));
@@ -77,15 +89,52 @@ contract Perevod{
         samples.push(Sample(samples.length, categorys[2].id_cat, "Pogasheniye zadolgnosti", 90));
     }
 
-    function change_status(address _polz) public{
-        require (users[msg.sender][0].check_admin == true, "You're not an admin!");
-        require (users[_polz][0].check_admin != true, "User is already the admin!");
-        users[_polz][0].check_admin = true;
+    //Функция создания заявки на смену роли
+    function apl_change_status(address _polz) public{
+        require (users[_polz].check_admin != true, "You are already the admin!");   //Проверка, админ ли вы или нет
+        aplications[_polz] = ApplicationRole(amount_admin, false); //Добавление в массив
     }
 
+    //Ответ админа на заявку по смене роли
+    function apl_admin_answer(address _polz, bool answer) public{
+        require(users[msg.sender].check_admin == true, "You are not an admin!");    //Проверка, админ запускает или нет
+        require(aplications[_polz].end != true, "Already end!");    //Проверка статуса заявки
+        if(answer){
+            aplications[_polz].confrims -= 1;   //Уменьшение кол-ва оставшихся подтверждений
+        }
+        else{
+            aplications[_polz].end = true;  //Сразу закрытие заявки
+        }
+        //Если отсавшиеся подтверждения равны 0
+        if(aplications[_polz].confrims == 0){
+            users[_polz].check_admin = true;    //Смена роли
+            amount_admin += 1;  //Увеличение кол-ва админов
+        }
+    }
+
+    //Просмотр пользователя
+    function viewUser(address _polz) public view returns(User memory){
+        return users[_polz];
+    }
+
+    //Регистрация
+    function registration(address _login, bytes32 _password) public returns(bool){
+        require(users[_login].login != _login, "This user is already exist!");  //Проверка на то, существует ли пользователь под данныи логином
+        users[_login] = User(_login, _password, false); //Внесение в список юзеров
+        return true;
+    }
+    
+    //Авторизация
+    function avtorization(address _login, bytes32 _password) public view returns(bool){
+        require(users[_login].login == _login, "This user is not exist!");  //Првоерка, существует ли пользователь
+        require(users[_login].password == _password, "Wrong password!");    //Проверка пароля
+        return true;
+    }
+
+    //Создания транзакции
     function add_trans(address _recipient, uint _id_cat, string memory _code_word, string memory _description, bool _secure) public payable {
-        require(msg.sender != _recipient, "You can not translate to yourself!");
-        require(categorys.length > _id_cat, "This category does not exist!");
+        require(msg.sender != _recipient, "You can not translate to yourself!");    //Проверка на то, что не переводим самому себе
+        require(categorys.length > _id_cat, "This category does not exist!");   //Проверка на то, что есть такая категория
         if (_secure == true){
             translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, true, false, false, false, 3));
         }
@@ -94,11 +143,12 @@ contract Perevod{
         }
     }
 
+    //Ответ на безопасный перевод
     function secure_answer(uint _id_trans, bool answer_admin) public{
-        require(users[msg.sender][0].check_admin == true, "You're not an admin!");
-        require(msg.sender != translates[_id_trans].sender, "You can not confrim translate to yourself!");
-        require(translates[_id_trans].end != true, "Translate is over!");
-        require(translates[_id_trans].admin_answer != true, "Always answer!");
+        require(users[msg.sender].check_admin == true, "You're not an admin!"); //Проверка на админа
+        require(msg.sender != translates[_id_trans].sender, "You can not confrim translate to yourself!");  //Нельзя принять у самого себя
+        require(translates[_id_trans].end != true, "Translate is over!");   //Проверка, завершена ли транзакция
+        require(translates[_id_trans].admin_answer != true, "Always answer!");  //Проверка, ответил ли другой админ
         if (answer_admin == true){
             translates[_id_trans].admin_answer = true;
         }
@@ -106,31 +156,43 @@ contract Perevod{
             translates[_id_trans].admin_answer = true;
             translates[_id_trans].end = true;
         }
-        payable(msg.sender).transfer(translates[_id_trans].sum / 10);
+        payable(msg.sender).transfer(translates[_id_trans].sum / 10);   //Перевод админу 10%
     }
 
+    //Ответ получателя
     function recipient_answer(uint _id_trans, string memory _code_word, bool answer_recipient) public payable{
-        require(msg.sender == translates[_id_trans].recipient, "You're not the recepient!");
-        require(translates[_id_trans].end != true, "Always end!");
-        require(translates[_id_trans].admin_answer == true, "Admin don't answer this translate!");
-        require(translates[_id_trans].polz_confrim != true, "You always answer!");
-        require(keccak256(abi.encodePacked((_code_word))) == keccak256(abi.encodePacked((translates[_id_trans].code_word))), "Error!");
-        if (answer_recipient == true){
-            translates[_id_trans].polz_confrim = true;
-            translates[_id_trans].end = true;
-            payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
-        }
-        else{
-            translates[_id_trans].attempts -= 1;
-            if (translates[_id_trans].attempts == 0){
+        require(msg.sender == translates[_id_trans].recipient, "You're not the recepient!");    //Проверка на получателя
+        require(translates[_id_trans].end != true, "Always end!");  //Проверка, завершена ли транзакция
+        require(translates[_id_trans].admin_answer == true, "Admin don't answer this translate!");  //Првоерка на ответ админа
+        require(translates[_id_trans].polz_confrim != true, "You always answer!");  //Проверка, ответил ли получатель
+        if(answer_recipient){
+            if (keccak256(abi.encodePacked((_code_word))) == keccak256(abi.encodePacked((translates[_id_trans].code_word)))){
                 translates[_id_trans].polz_confrim = true;
                 translates[_id_trans].end = true;
-                if (translates[_id_trans].secure == true){
-                    payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+                payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
+            }
+            else{
+                translates[_id_trans].attempts -= 1;
+                if (translates[_id_trans].attempts == 0){
+                    translates[_id_trans].polz_confrim = true;
+                    translates[_id_trans].end = true;
+                    if (translates[_id_trans].secure == true){
+                        payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+                    }
+                    else{
+                        payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
+                    }
                 }
-                else{
-                    payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
-                }
+            }
+        }
+        else{
+            translates[_id_trans].polz_confrim = true;
+            translates[_id_trans].end = true;
+            if (translates[_id_trans].secure == true){
+                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+            }
+            else{
+                payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
             }
         }
     }
