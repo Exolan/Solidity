@@ -63,8 +63,7 @@ input::placeholder{
     width: max-content;
     height: max-content;
     gap: 130px;
-    background: -webkit-linear-gradient(90deg, #c2c2c2,#e3e3e3,#fafafa);                     
-    background: linear-gradient(90deg, #c2c2c2,#e3e3e3,#fafafa);       
+    background-color: #b6a1ca;    
 }
 
 .modals header{
@@ -136,8 +135,26 @@ input::placeholder{
 }
 
 .conteiner-header{
+    display: grid;
+    justify-content: center;
+}
+
+.conteiner .conteiner-title{
     display: flex;
     justify-content: center;
+}
+
+.conteiner .profile{
+    display: flex;
+    padding: 10px;
+    border: 3px solid black;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+
+.conteiner .profile p{
+    text-align: center;
 }
 
 .conteiner-main{
@@ -153,5 +170,44 @@ input::placeholder{
     display: grid;
     justify-content: center;
 }
+
+.my-function div{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.my-function input{
+    width: 180px;
+    height: 40px;
+}
+
+.my-function select{
+    width: 180px;
+    height: 40px;
+}
+
+.my-function .secure-button{
+    display: flex;
+    align-items: center;
+    gap: 10px
+}
+
+.my-function .secure-button p{
+    font-size: 20px;
+}
+
+.my-function .secure-button button{
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 20px;
+    height: 20px;
+    background-color: rgb(240, 108, 108);
+}
+
+.my-function .secure-button span{
+    font-size: 10px;
+}
+
 
 

@@ -12,6 +12,11 @@ export const abi = [
 				"type": "uint256"
 			},
 			{
+				"internalType": "uint256",
+				"name": "sum",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
 				"name": "_code_word",
 				"type": "string"
@@ -30,6 +35,37 @@ export const abi = [
 		"name": "add_trans",
 		"outputs": [],
 		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_polz",
+				"type": "address"
+			},
+			{
+				"internalType": "bool",
+				"name": "answer",
+				"type": "bool"
+			}
+		],
+		"name": "apl_admin_answer",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_polz",
+				"type": "address"
+			}
+		],
+		"name": "apl_change_status",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -116,6 +152,11 @@ export const abi = [
 				"internalType": "uint256",
 				"name": "confrims",
 				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "end",
+				"type": "bool"
 			}
 		],
 		"stateMutability": "view",
@@ -307,6 +348,66 @@ export const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "viewCat",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id_cat",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name_cat",
+						"type": "string"
+					}
+				],
+				"internalType": "struct Perevod.Category[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "viewSamples",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id_samp",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id_cat",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "name_samp",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "sum",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Perevod.Sample[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -343,3 +444,5 @@ export const abi = [
 		"type": "function"
 	}
 ]
+
+// export default abi
