@@ -1,457 +1,12 @@
 import { abi } from "./config/abi/abi.js";
-// const abi = [
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_recipient",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "_id_cat",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "sum",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "_code_word",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "_description",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "_secure",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"name": "add_trans",
-// 		"outputs": [],
-// 		"stateMutability": "payable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_polz",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "answer",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"name": "apl_admin_answer",
-// 		"outputs": [],
-// 		"stateMutability": "nonpayable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_polz",
-// 				"type": "address"
-// 			}
-// 		],
-// 		"name": "apl_change_status",
-// 		"outputs": [],
-// 		"stateMutability": "nonpayable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "_id_trans",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "_code_word",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "answer_recipient",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"name": "recipient_answer",
-// 		"outputs": [],
-// 		"stateMutability": "payable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_login",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "bytes32",
-// 				"name": "_password",
-// 				"type": "bytes32"
-// 			}
-// 		],
-// 		"name": "registration",
-// 		"outputs": [
-// 			{
-// 				"internalType": "bool",
-// 				"name": "",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"stateMutability": "nonpayable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "_id_trans",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "answer_admin",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"name": "secure_answer",
-// 		"outputs": [],
-// 		"stateMutability": "nonpayable",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [],
-// 		"stateMutability": "nonpayable",
-// 		"type": "constructor"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "",
-// 				"type": "address"
-// 			}
-// 		],
-// 		"name": "aplications",
-// 		"outputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "confrims",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "end",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_login",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "bytes32",
-// 				"name": "_password",
-// 				"type": "bytes32"
-// 			}
-// 		],
-// 		"name": "avtorization",
-// 		"outputs": [
-// 			{
-// 				"internalType": "bool",
-// 				"name": "",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "",
-// 				"type": "uint256"
-// 			}
-// 		],
-// 		"name": "categorys",
-// 		"outputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "id_cat",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "name_cat",
-// 				"type": "string"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "",
-// 				"type": "uint256"
-// 			}
-// 		],
-// 		"name": "samples",
-// 		"outputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "id_samp",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "id_cat",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "name_samp",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "sum",
-// 				"type": "uint256"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "",
-// 				"type": "uint256"
-// 			}
-// 		],
-// 		"name": "translates",
-// 		"outputs": [
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "id_trans",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "id_cat",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "address",
-// 				"name": "sender",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "address",
-// 				"name": "recipient",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "sum",
-// 				"type": "uint256"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "code_word",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "string",
-// 				"name": "description",
-// 				"type": "string"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "secure",
-// 				"type": "bool"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "admin_answer",
-// 				"type": "bool"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "polz_confrim",
-// 				"type": "bool"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "end",
-// 				"type": "bool"
-// 			},
-// 			{
-// 				"internalType": "uint256",
-// 				"name": "attempts",
-// 				"type": "uint256"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "",
-// 				"type": "address"
-// 			}
-// 		],
-// 		"name": "users",
-// 		"outputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "login",
-// 				"type": "address"
-// 			},
-// 			{
-// 				"internalType": "bytes32",
-// 				"name": "password",
-// 				"type": "bytes32"
-// 			},
-// 			{
-// 				"internalType": "bool",
-// 				"name": "check_admin",
-// 				"type": "bool"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [],
-// 		"name": "viewCat",
-// 		"outputs": [
-// 			{
-// 				"components": [
-// 					{
-// 						"internalType": "uint256",
-// 						"name": "id_cat",
-// 						"type": "uint256"
-// 					},
-// 					{
-// 						"internalType": "string",
-// 						"name": "name_cat",
-// 						"type": "string"
-// 					}
-// 				],
-// 				"internalType": "struct Perevod.Category[]",
-// 				"name": "",
-// 				"type": "tuple[]"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [],
-// 		"name": "viewSamples",
-// 		"outputs": [
-// 			{
-// 				"components": [
-// 					{
-// 						"internalType": "uint256",
-// 						"name": "id_samp",
-// 						"type": "uint256"
-// 					},
-// 					{
-// 						"internalType": "uint256",
-// 						"name": "id_cat",
-// 						"type": "uint256"
-// 					},
-// 					{
-// 						"internalType": "string",
-// 						"name": "name_samp",
-// 						"type": "string"
-// 					},
-// 					{
-// 						"internalType": "uint256",
-// 						"name": "sum",
-// 						"type": "uint256"
-// 					}
-// 				],
-// 				"internalType": "struct Perevod.Sample[]",
-// 				"name": "",
-// 				"type": "tuple[]"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	},
-// 	{
-// 		"inputs": [
-// 			{
-// 				"internalType": "address",
-// 				"name": "_polz",
-// 				"type": "address"
-// 			}
-// 		],
-// 		"name": "viewUser",
-// 		"outputs": [
-// 			{
-// 				"components": [
-// 					{
-// 						"internalType": "address",
-// 						"name": "login",
-// 						"type": "address"
-// 					},
-// 					{
-// 						"internalType": "bytes32",
-// 						"name": "password",
-// 						"type": "bytes32"
-// 					},
-// 					{
-// 						"internalType": "bool",
-// 						"name": "check_admin",
-// 						"type": "bool"
-// 					}
-// 				],
-// 				"internalType": "struct Perevod.User",
-// 				"name": "",
-// 				"type": "tuple"
-// 			}
-// 		],
-// 		"stateMutability": "view",
-// 		"type": "function"
-// 	}
-// ]
 
-const contractAddress = "0x708cAe7e366b021a26Be9159a164A7C061Cf4462";
+const contractAddress = "0x44e9116C28Ab842cEe410Bb5678FC03C3D6469C5";
 
-let web3, contract, modalAvtorization, modalRegistration, conteiner, account;
+let web3, contract, modalAvtorization, modalRegistration, modalTransfers, conteiner, account;
 
 modalAvtorization = document.querySelector('.modal-avtorization');
 modalRegistration = document.querySelector('.modal-registration');
+modalTransfers = document.querySelector('.modal-transfers')
 conteiner = document.querySelector('.conteiner');
 
 function network() {
@@ -573,7 +128,8 @@ async function drawProfile(account){
 	let address = conteiner.querySelector('.address')
 	let balance = conteiner.querySelector('.balance')
 	let role = conteiner.querySelector('.role')
-	let button = conteiner.querySelector('.button-exit')
+	let buttonExit = conteiner.querySelector('.button-exit')
+	let buttonTrans = conteiner.querySelector('.button-trans')
 
 	let getAd = document.createElement('p')
 	getAd.textContent = account
@@ -592,10 +148,239 @@ async function drawProfile(account){
 	}
 	role.append(getR)
 
-	button.onclick = ()=>{
-		conteiner.style.display = 'none';
+	buttonTrans.onclick = ()=>{
+		modalTransfers.style.display = "grid"
+		conteiner.style.opacity = '0.6';
+		drawTrans(account)
+	}
+
+	buttonExit.onclick = ()=>{
 		modalAvtorization.style.display = 'grid';
 	}
+}
+
+async function drawTrans(account){
+	let array = await contract.methods.viewTrans().call({from: account})
+	console.log(array);
+
+	let i = 1
+	for (let el of array){
+		if(el[2] == account){
+			let div = document.createElement('div')
+			let num = document.createElement('div')
+			let h3 = document.createElement('h3')
+			let address = document.createElement('div')
+			let category = document.createElement('div')
+			let money = document.createElement('div')
+			h3.textContent = i
+			i++
+
+		}
+	}
+}
+
+async function addTrans(address, select, id_cat,  money, code_word, description, secure){
+	let array = [address, code_word]
+	let check = true
+	for(let i of array){
+		if (i.value == ""){
+			i.style.border = "2px solid red"
+			check = false
+		}
+		else{
+			i.style.border = "none"
+		}
+	}
+
+	if (id_cat == 3){
+		check = false
+		select.style.border = "2px solid red"
+	}
+	else{
+		select.style.border = "none"
+	}
+	if(check){
+		await contract.methods.add_trans(address.value, id_cat, money, code_word.value, description, secure).send({from:account, value: money, gas: "99999999"})
+	}
+	
+}
+
+async function drawTrFunction(element){
+	let header = document.createElement('header')
+	header.className = 'function-header'
+
+	let h3 = document.createElement('h3')
+	h3.textContent = 'Перевод'
+	header.append(h3)
+
+	let divButton = document.createElement('div')
+	divButton.className = 'button-confrim'
+
+	let buttonConfrim = document.createElement('button')
+	let textButtonConfrim = document.createElement('span')
+	textButtonConfrim.textContent = 'Отправить'
+	buttonConfrim.append(textButtonConfrim)
+	divButton.append(buttonConfrim)
+
+	let div = document.createElement('div')
+	div.className = 'body-function'
+
+	let inputAddress = document.createElement('input')
+	inputAddress.className = 'input-address'
+	inputAddress.placeholder = 'Введите адрес'
+
+	let selectCat = document.createElement('select')
+	let selectShablon = document.createElement('select')
+
+	let money = document.createElement('input')
+	money.placeholder = 'Введите сумму'
+
+	let inputCodeW = document.createElement('input')
+	inputCodeW.className = 'inpute-codeW'
+	inputCodeW.placeholder = 'Введите код-слово'
+
+	let inputDesc = document.createElement('input')
+	inputDesc.className = 'input-desc'
+	inputDesc.placeholder = 'Описание'
+
+	let buttonSecure = document.createElement('div')
+	buttonSecure.className = 'secure-button'
+
+	let text = document.createElement('p')
+	text.textContent = 'Безопасный перевод'
+
+	let button = document.createElement('button')
+	let buttonText = document.createElement('span')
+	buttonText.textContent = 'Нет'
+
+	let statusTransfer = false
+
+	button.onclick = ()=>{
+		if (button.textContent == 'Нет'){
+			button.style = "background-color: aquamarine"
+			button.textContent = 'Да'
+			statusTransfer = true
+		}
+		else{
+			button.style = "background-color: rgb(240, 108, 108)"
+			button.textContent = 'Нет'
+			statusTransfer = false
+		}
+	}
+
+	button.append(buttonText)
+	buttonSecure.append(text)
+	buttonSecure.append(button)
+
+	let category = await contract.methods.viewCat().call()
+	let samples = await contract.methods.viewSamples().call()
+
+	let i = 0;
+	let activeCat = 3;
+	let activeSample;
+	let sample;
+
+	let clearOpt = document.createElement('option')
+	let pOpt = document.createElement('p')
+	pOpt.textContent = '-'
+	clearOpt.append(pOpt)
+	clearOpt.setAttribute('selected', 'selected')
+
+	for(let key of category){
+		let option = document.createElement('option')
+		let p = document.createElement('p')
+
+		option.id = i
+		i++
+		p.textContent = key[1]
+		option.append(p)
+		selectCat.append(option)
+	}
+	selectCat.append(clearOpt)
+
+	if(activeCat == 3){
+		money.setAttribute('disabled', 'disabled')
+		selectShablon.setAttribute('disabled', 'disabled')
+	}
+
+	selectCat.onchange = ()=>{
+		while(selectShablon.firstChild){
+			selectShablon.remove(selectShablon.firstChild)
+		}
+		activeCat = selectCat.selectedIndex;
+		for(let key of samples){
+			if(key[1] == activeCat){
+				money.removeAttribute('disabled')
+				selectShablon.removeAttribute('disabled')
+				let option = document.createElement('option')
+				let p = document.createElement('p')
+							
+				p.id = key[0]
+				p.textContent = key[2] + ' ' + key[3]
+				option.append(p)
+				selectShablon.append(option)
+
+				activeSample = selectShablon.selectedIndex;
+				let options = selectShablon.querySelectorAll('option')
+				let op = options[activeSample].querySelector('p')
+				for(let key of samples){
+					if(key[1] == activeCat & key[0] == op.id){
+						money.value = key[3]
+						sample = op.id
+					}
+					else if (options[activeSample].textContent == "-"){
+						money.removeAttribute('disabled')
+					}
+					else{
+						money.setAttribute('disabled', 'disabled')
+					}
+				}
+			}
+			else if(activeCat == 3){
+				money.setAttribute('disabled', 'disabled')
+				selectShablon.setAttribute('disabled', 'disabled')
+			}
+		}
+		selectShablon.append(clearOpt)
+	}
+
+	selectShablon.onchange = ()=>{
+		activeSample = selectShablon.selectedIndex;
+		let options = selectShablon.querySelectorAll('option')
+		let p = options[activeSample].querySelector('p')
+		for(let key of samples){
+			if(key[1] == activeCat & key[0] == p.id){
+				money.value = key[3]
+				sample = p.id
+			}
+			else if (options[activeSample].textContent == "-"){
+				money.removeAttribute('disabled')
+			}
+			else{
+				money.setAttribute('disabled', 'disabled')
+			}
+		}			
+	}
+
+	buttonConfrim.onclick = ()=>{
+		addTrans(inputAddress, selectCat, activeCat, money.value, inputCodeW, inputDesc.value, statusTransfer)
+		inputAddress.value = ''
+		money.value = ""
+		inputCodeW.value = ""
+		inputDesc.value = ""
+		statusTransfer = false
+	}
+
+	element.append(header)
+	div.append(inputAddress)
+	div.append(selectCat)
+	div.append(selectShablon)	
+	div.append(money)	
+	div.append(inputCodeW)
+	div.append(inputDesc)
+	div.append(buttonSecure)
+	element.append(div)
+	element.append(divButton)
 }
 
 async function drawFunction(user){
@@ -620,115 +405,7 @@ async function drawFunction(user){
 	for (let element of divs){
 		switch(element.id){
 			case '0': 
-				let inputAddress = document.createElement('input')
-				inputAddress.className = 'input-address'
-				inputAddress.placeholder = 'Введите адрес получателя'
-				let selectCat = document.createElement('select')
-				let selectShablon = document.createElement('select')
-				let inputMoney = document.createElement('input')
-				inputMoney.className = 'input-money'
-				inputMoney.placeholder = 'Введите сумму'
-				let inputCodeW = document.createElement('input')
-				inputCodeW.className = 'inpute-codeW'
-				inputCodeW.placeholder = 'Введите кодовое слово'
-				let inputDesc = document.createElement('input')
-				inputDesc.className = 'input-desc'
-				inputDesc.placeholder = 'Описание'
-				let buttonSecure = document.createElement('div')
-				buttonSecure.className = 'secure-button'
-				let text = document.createElement('p')
-				text.textContent = 'Безопасный перевод'
-				let button = document.createElement('button')
-				let buttonText = document.createElement('span')
-				buttonText.textContent = 'Нет'
-				button.append(buttonText)
-				buttonSecure.append(text)
-				buttonSecure.append(button)
-
-				let category = await contract.methods.viewCat().call()
-				let samples = await contract.methods.viewSamples().call()
-
-				let i = 0;
-				let activeCat;
-				let activeSample;
-
-				let clearOpt = document.createElement('option')
-				let pOpt = document.createElement('p')
-				pOpt.textContent = '-'
-				clearOpt.append(pOpt)
-				clearOpt.setAttribute('selected', 'selected')
-
-				for(let key of category){
-					let option = document.createElement('option')
-					let p = document.createElement('p')
-
-					option.id = i
-					i++
-					p.textContent = key[1]
-					option.append(p)
-					selectCat.append(option)
-				}
-				selectCat.append(clearOpt)
-
-				selectCat.onchange = ()=>{
-					while(selectShablon.firstChild){
-						selectShablon.remove(selectShablon.firstChild)
-					}
-					activeCat = selectCat.selectedIndex;
-					for(let key of samples){
-						if(key[1] == activeCat){
-							let option = document.createElement('option')
-							let p = document.createElement('p')
-							
-							p.id = key[0]
-							p.textContent = key[2] + ' ' + key[3]
-							option.append(p)
-							selectShablon.append(option)
-
-							activeSample = selectShablon.selectedIndex;
-							let options = selectShablon.querySelectorAll('option')
-							let op = options[activeSample].querySelector('p')
-							for(let key of samples){
-								if(key[1] == activeCat & key[0] == op.id){
-									inputMoney.value = key[3]
-									inputMoney.setAttribute('disabled', 'true')
-								}
-							}
-						}
-						else if(activeCat == 3){
-							inputMoney.removeAttribute('disabled')
-						}
-					}
-				}
-
-				selectShablon.onchange = ()=>{
-					activeSample = selectShablon.selectedIndex;
-					let options = selectShablon.querySelectorAll('option')
-					let p = options[activeSample].querySelector('p')
-					for(let key of samples){
-						if(key[1] == activeCat & key[0] == p.id){
-							inputMoney.value = key[3]
-							console.log(1);
-							inputMoney.setAttribute('disabled', 'true')
-						}
-						else if(activeCat == 3){
-							inputMoney.removeAttribute('disabled')
-						}
-					}
-					
-				}
-
-				// selectCat.addEventListener('change', changeOption(samples, selectShablon, selectCat))
-
-				// console.log(category);
-				// console.log(samples);
-				element.append(inputAddress)
-				element.append(selectCat)
-				element.append(selectShablon)
-				element.append(inputMoney)				
-				element.append(inputCodeW)
-				element.append(inputDesc)
-				element.append(buttonSecure)
+				drawTrFunction(element)
 		}
 	}
 }

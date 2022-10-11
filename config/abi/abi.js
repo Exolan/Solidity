@@ -408,6 +408,81 @@ export const abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "viewTrans",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id_trans",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "id_cat",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "sum",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "code_word",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "secure",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "admin_answer",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "polz_confrim",
+						"type": "bool"
+					},
+					{
+						"internalType": "bool",
+						"name": "end",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "attempts",
+						"type": "uint256"
+					}
+				],
+				"internalType": "struct Perevod.Translate[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -444,5 +519,3 @@ export const abi = [
 		"type": "function"
 	}
 ]
-
-// export default abi
