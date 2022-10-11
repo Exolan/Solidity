@@ -35,6 +35,7 @@ contract Perevod{
     struct Translate{
         uint id_trans;  //ID транзакции
         uint id_cat;    //ID категории
+        // uint id_samp;
         address sender; //Адрес отправителя
         address recipient;  //Адрес получателя
         uint sum;   //Сумма перевода
@@ -117,6 +118,19 @@ contract Perevod{
         return users[_polz];
     }
 
+    //Просмотр категорий
+    function viewCat() public view returns(Category[] memory){
+        return categorys;
+    }
+
+    function viewSamples() public view returns(Sample[] memory){
+        return samples;
+    }
+
+    function viewTrans() public view returns(Translate[] memory){
+        return translates;
+    }
+
     //Регистрация
     function registration(address _login, bytes32 _password) public returns(bool){
         require(users[_login].login != _login, "This user is already exist!");  //Проверка на то, существует ли пользователь под данныи логином
@@ -132,14 +146,15 @@ contract Perevod{
     }
 
     //Создания транзакции
-    function add_trans(address _recipient, uint _id_cat, string memory _code_word, string memory _description, bool _secure) public payable {
+    function add_trans(address _recipient, uint _id_cat,  uint sum, string memory _code_word, string memory _description, bool _secure) public payable {
         require(msg.sender != _recipient, "You can not translate to yourself!");    //Проверка на то, что не переводим самому себе
         require(categorys.length > _id_cat, "This category does not exist!");   //Проверка на то, что есть такая категория
+        require(msg.value >= sum, "You dont have money!");
         if (_secure == true){
-            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, true, false, false, false, 3));
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, sum, _code_word, _description, true, false, false, false, 3));
         }
         else{
-            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, msg.value, _code_word, _description, false, true, false, false, 3));
+            translates.push(Translate(translates.length, _id_cat, msg.sender, _recipient, sum, _code_word, _description, false, true, false, false, 3));
         }
     }
 
