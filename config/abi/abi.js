@@ -40,9 +40,9 @@ export const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_polz",
-				"type": "address"
+				"internalType": "uint256",
+				"name": "id_apl",
+				"type": "uint256"
 			},
 			{
 				"internalType": "bool",
@@ -56,16 +56,23 @@ export const abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_polz",
-				"type": "address"
-			}
-		],
+		"inputs": [],
 		"name": "apl_change_status",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_id_trans",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelTrans",
+		"outputs": [],
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -141,13 +148,47 @@ export const abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "address",
+				"internalType": "uint256",
 				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "answers",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "admin",
 				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"name": "aplications",
 		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id_apl",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "polz",
+				"type": "address"
+			},
 			{
 				"internalType": "uint256",
 				"name": "confrims",
@@ -342,6 +383,66 @@ export const abi = [
 				"internalType": "bool",
 				"name": "check_admin",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "viewAnswer",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "admin",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					}
+				],
+				"internalType": "struct Perevod.Answer[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "viewAplications",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "id_apl",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "polz",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "confrims",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bool",
+						"name": "end",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct Perevod.ApplicationRole[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",

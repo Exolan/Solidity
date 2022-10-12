@@ -15,68 +15,14 @@
     <script src="./config/web3/web3_min.js" defer></script>
     <script src="./config/keccak256/keccak256.js" defer></script>
     <script src="./main.js" type="module" defer></script>
-    <!-- <script src="./abi.js" type="module" defer></script> -->
 </head>
 <body>
-    <div class="modals">
-        <div class="modal-avtorization">
-            <header class="modal-header">
-                <h1 class="modal-title">Авторизация</h1>
-            </header>
-            <main class="modal-conteiner">
-                <input class="input-login" type="text" placeholder="Введите Логин">
-                <input class="input-password" type="text" placeholder="Введите Пароль">
-            </main>
-            <footer class="modal-footer">
-                <button class="modal-button-enter"><span>Войти</span></button>
-                <button class="modal-button-reg"><span>Регистрация</span></button>
-            </footer>
-        </div>
-    
-        <div class="modal-registration">
-            <header class="modal-header">
-                <h1 class="modal-title">Регистрация</h1>
-            </header>
-            <main class="modal-conteiner">
-                <input class="input-login" type="text" placeholder="Введите Логин">
-                <input class="input-password" type="text" placeholder="Введите Пароль">
-                <input class="input-password-repeat" type="text" placeholder="Повторите Пароль">
-            </main>
-            <footer class="modal-footer">
-                <button class="modal-button-make"><span>Зарегистрироваться</span></button>
-                <button class="modal-button-back"><span>Назад</span></button>
-            </footer>
-        </div>
-
-        <div class="modal-transfers">
-            <header class="modal-header">
-                <h1 class="modal-title">Переводы</h1>
-            </header>
-            <main class="modal-conteiner"></main>
-        </div>
-    </div>
-
     <div class="conteiner">
         <header class="conteiner-header">
             <div class="conteiner-title">
                 <h1>TRANSFER</h1>
             </div>
             <div class="profile">
-                <div class="address">
-                    <p>Адрес</p>
-                </div>
-                <div class="balance">
-                    <p>Баланс</p>
-                </div>
-                <div class="role">
-                    <p>Роль</p>
-                </div>
-                <div class='trans'>
-                    <button class="button-trans">Посмотреть</button>
-                </div>
-                <div class="exit">
-                    <button class="button-exit"><span>Выйти</span></button>
-                </div>
             </div>
         </header>
         <main class="conteiner-main">
@@ -85,6 +31,48 @@
             </div>
         </main>
         <footer class="conteiner-footer"></footer>
+    </div>
+    
+    <div class="modals">
+        <div class="overlay">
+            <div class="modal-avtorization">
+                <header class="modal-header">
+                    <h1 class="modal-title">Авторизация</h1>
+                </header>
+                <main class="modal-conteiner">
+                    <input class="input-login" type="text" placeholder="Введите Логин">
+                    <input class="input-password" type="text" placeholder="Введите Пароль">
+                </main>
+                <footer class="modal-footer">
+                    <button class="modal-button-enter"><span>Войти</span></button>
+                    <button class="modal-button-reg"><span>Регистрация</span></button>
+                </footer>
+            </div>
+        
+            <div class="modal-registration">
+                <header class="modal-header">
+                    <h1 class="modal-title">Регистрация</h1>
+                </header>
+                <main class="modal-conteiner">
+                    <input class="input-login" type="text" placeholder="Введите Логин">
+                    <input class="input-password" type="text" placeholder="Введите Пароль">
+                    <input class="input-password-repeat" type="text" placeholder="Повторите Пароль">
+                </main>
+                <footer class="modal-footer">
+                    <button class="modal-button-make"><span>Зарегистрироваться</span></button>
+                    <button class="modal-button-back"><span>Назад</span></button>
+                </footer>
+            </div>
+    
+            <div class="modal-transfers">
+                <header class="modal-header">
+                    <h1 class="modal-title">Переводы</h1>
+                    <img src="./resurce/exit.png" alt="" class="exit">
+                </header>
+                <main class="modal-conteiner">
+                </main>
+            </div>
+        </div>
     </div>
 </body>
 </html>

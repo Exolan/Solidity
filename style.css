@@ -4,7 +4,8 @@ body{
     margin: 0;
     padding: 0;
     background: -webkit-linear-gradient(90deg, #9b9acc,#b6a1ca,#c9aac7);                      
-    background: linear-gradient(90deg, #9b9acc,#b6a1ca,#c9aac7);                                          
+    background: linear-gradient(90deg, #9b9acc,#b6a1ca,#c9aac7);   
+    overflow: hidden;                                       
 }
 
 h1, h2, h3, h4, h5{
@@ -31,6 +32,12 @@ button{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    border: none;
+    border-radius: 20px;
+}
+
+button:hover{
+    background: #9b9acc;
 }
 
 input::placeholder{
@@ -38,10 +45,17 @@ input::placeholder{
 }
 
 .modals{
-    display: flex;
+    display: grid;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    justify-content: center;                                    
+    justify-content: center;
+    padding-top: 80px;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);                          
 }
 
 .modal-avtorization{
@@ -130,15 +144,70 @@ input::placeholder{
 
 .modal-transfers{
     display: none;
-    position: absolute;
-    z-index: 1;
+    padding: 25px;
+    z-index: 2;
     justify-content: center;
-    border: 3px solid black;
     border-radius: 3%;
     width: max-content;
-    height: max-content;
-    gap: 130px;
-    background-color: #b6a1ca;   
+    height: 800px;
+    gap: 80px;
+    background-color: wheat;   
+}
+
+.modal-transfers .modal-conteiner{
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.modal-transfers .modal-conteiner::-webkit-scrollbar{
+    width: 6px;
+    background: none;
+}
+
+.modal-transfers .modal-conteiner::-webkit-scrollbar-thumb{
+    background: #B7BDCB;
+    box-shadow: 4px 4px 15px rgba(112, 124, 151, 0.05), 2px 2px 10px rgba(112, 124, 151, 0.1), 1px 1px 50px rgba(112, 124, 151, 0.15);
+    border-radius: 10px;
+}
+
+.modal-transfers header{
+    position: relative;
+}
+
+.modal-transfers img{
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    left: auto;
+}
+
+.modal-transfers .transfer{
+    display: flex;
+    align-items: center;
+    background-color: #b6a1ca;
+    border-radius: 10px;
+    padding: 20px;
+    gap: 30px;
+}
+
+.modal-transfers .transfer p{
+    font-size: 18px;
+}
+
+.modal-transfers .transfer h3{
+    font-size: 30px;
+}
+
+.modal-transfers .transfer span{
+    font-size: 18px;
+}
+
+.button-cancel{
+    display: flex;
+    justify-content: center;
 }
 
 .conteiner{
@@ -160,11 +229,24 @@ input::placeholder{
 .conteiner .profile{
     display: flex;
     padding: 10px;
-    border: 3px solid black;
+    border: none;
     border-radius: 10px;
     justify-content: center;
     align-items: center;
     gap: 30px;
+    background-color: antiquewhite;
+}
+
+.conteiner .profile button{
+    border: none;
+    border-radius: 10px;
+    background-color: #ffffff;
+    width: 100px;
+    height: 40px;
+}
+
+.conteiner .profile button span{
+   font-size: 15px;
 }
 
 .conteiner .profile p{
@@ -180,6 +262,18 @@ input::placeholder{
     display: flex;
 }
 
+.my-function{
+    display: grid;
+    border-radius: 10px;
+    padding: 70px;
+    width: max-content;
+    height: 400px;
+    margin-top: 60px;
+    gap: 10px;
+    background-color: antiquewhite;
+    overflow-y: auto;
+}
+
 .my-function span{
     display: grid;
     justify-content: center;
@@ -189,53 +283,101 @@ input::placeholder{
 .my-function div{
     display: grid;
     justify-content: center;
-    gap: 30px;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #c9aac7;
 }
 
 .my-function header{
-    text-align: center;
+    display: flex;
+    padding-left: 20px;
+    justify-content: left;
 }
 
 .my-function header h3{
+    text-align: left;
     font-size: 25px;
 }
 
 .my-function .body-function{
     display: flex;
+    gap: 10px;
     align-items: center;
 }
 
 .my-function input{
+    border: none;
+    border-radius: 10px;
     width: 130px;
     height: 40px;
 }
 
 .my-function select{
+    border: none;
+    border-radius: 10px;
     width: 130px;
     height: 40px;
 }
 
 .my-function .secure-button{
+    padding: 0;
     display: flex;
+    background-color: #ffffff;
+    width: 140px;
+    height: 45px;
+    gap: 5px;
     align-items: center;
-    gap: 10px
 }
 
 .my-function .secure-button p{
+    text-align: center;
     font-size: 13px;
 }
 
 .my-function .secure-button button{
-    border: 1px solid black;
+    margin-right: 5px;
     border-radius: 10px;
     width: 24px;
     height: 24px;
-    background-color: rgb(240, 108, 108);
+    background-color: rgb(247, 148, 144);
 }
 
 .my-function .secure-button button span{
   font-size: 13px;
 }
 
+.my-function .button-confrim{
+    display: flex;
+    justify-content: left;
+    width: 130px;
+    height: 40px;
+}
 
+.my-function .button-confrim button{
+   background-color: #9b9acc;
+}
+
+.my-function .aplication{
+    display: grid;
+    justify-content: left;
+    width: 950px;
+    background-color: antiquewhite;
+}
+
+.my-function .aplication p{
+    font-size: 20px;
+}
+
+.my-function .buttons-confrim{
+    display: flex;
+    justify-content: left;
+    gap: 30px;
+    background: inherit;
+}
+
+.my-function .buttons-confrim button{
+    width: 100px;
+    height: 50px;
+    background-color: #ffffff;
+}
 
