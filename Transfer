@@ -27,6 +27,8 @@ contract Perevod{
 
     //Структура заявок на становление админом
     struct ApplicationRole{
+        uint id_apl;
+        address polz;
         uint confrims;  //Кол-во оставшихся подтверждений
         bool end; //Завершено или нет
     }
@@ -48,22 +50,28 @@ contract Perevod{
         uint attempts;  //Попытки ввода ключевого слова 
     }
 
+    struct Answer{
+        address admin;
+        address user;
+    }
+
     //Создание массивов
     mapping(address => User) public users; //Массив юзеров
-    mapping(address => ApplicationRole) public aplications; //Массив заявок на смену роли
+    ApplicationRole[] public aplications; //Массив заявок на смену роли
     Category[] public categorys; //Массив категорий
     Sample[] public samples; //Массив шаблонов
     Translate[] public translates;  //Массив транзакций
+    Answer[] public answers;
 
     //Создание стартового варианта решения
     constructor(){
         amount_admin = 2;   //По-началу админов 2
         //Адреса уже зарегестрированных пользователей
-        address admin2 = 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2;
-        address polz1 = 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db;
-        address polz2 = 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB;
-        address polz3 = 0x617F2E2fD72FD9D5503197092aC168c91465E7f2;
-        address polz4 = 0x17F6AD8Ef982297579C203069C1DbfFE4348c372;
+        address admin2 = 0x4e72c0d85534bD93D49daD2b03176A4496e5E53B;
+        address polz1 = 0x68c56e81cc4cFDE95CCf0c91BE254B3E11824327;
+        address polz2 = 0x5A7dAF9382Ba8B17E88d2261dECB404C235a9627;
+        address polz3 = 0x23a602A1Bcbb50A2b032aa05b5C5CD1D96f18bfa;
+        address polz4 = 0xE9435fa3bfBa3C2a01981dE272aE17d2C4Fd0D6C;
         //Админы
         users[msg.sender] = User(msg.sender, keccak256(abi.encodePacked("1234")), true);
         users[admin2] = User(admin2, keccak256(abi.encodePacked("1234")), true);
@@ -91,26 +99,32 @@ contract Perevod{
     }
 
     //Функция создания заявки на смену роли
-    function apl_change_status(address _polz) public{
-        require (users[_polz].check_admin != true, "You are already the admin!");   //Проверка, админ ли вы или нет
-        aplications[_polz] = ApplicationRole(amount_admin, false); //Добавление в массив
+    function apl_change_status() public{
+        require (users[msg.sender].check_admin != true, "You are already the admin!");   //Проверка, админ ли вы или нет
+        aplications.push(ApplicationRole(aplications.length, msg.sender, amount_admin, false));//Добавление в массив
     }
 
     //Ответ админа на заявку по смене роли
-    function apl_admin_answer(address _polz, bool answer) public{
+    function apl_admin_answer(uint id_apl, bool answer) public{
         require(users[msg.sender].check_admin == true, "You are not an admin!");    //Проверка, админ запускает или нет
-        require(aplications[_polz].end != true, "Already end!");    //Проверка статуса заявки
+        require(aplications[id_apl].end != true, "Already end!");    //Проверка статуса заявки
+        require(aplications.length >= id_apl, "This aplication is not exist!");
         if(answer){
-            aplications[_polz].confrims -= 1;   //Уменьшение кол-ва оставшихся подтверждений
+            aplications[id_apl].confrims = aplications[id_apl].confrims - 1;   //Уменьшение кол-ва оставшихся подтверждений
+            answers.push(Answer(msg.sender, aplications[id_apl].polz));
+            //Если отсавшиеся подтверждения равны 0
+            if(aplications[id_apl].confrims < 1){
+                users[aplications[id_apl].polz].check_admin = true;    //Смена роли
+                amount_admin += 1;  //Увеличение кол-ва админов
+        }
         }
         else{
-            aplications[_polz].end = true;  //Сразу закрытие заявки
+            aplications[id_apl].end = true;  //Сразу закрытие заявки
         }
-        //Если отсавшиеся подтверждения равны 0
-        if(aplications[_polz].confrims == 0){
-            users[_polz].check_admin = true;    //Смена роли
-            amount_admin += 1;  //Увеличение кол-ва админов
-        }
+    }
+
+    function viewAnswer() public view returns(Answer[] memory){
+        return answers;
     }
 
     //Просмотр пользователя
@@ -129,6 +143,21 @@ contract Perevod{
 
     function viewTrans() public view returns(Translate[] memory){
         return translates;
+    }
+
+    function viewAplications() public view returns(ApplicationRole[] memory){
+        return aplications;
+    }
+
+    function cancelTrans(uint _id_trans) public payable{
+        require(translates[_id_trans].polz_confrim == false, "Already is late!");
+        translates[_id_trans].end = true;
+        if (translates[_id_trans].secure == true){
+            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+        }
+        else{
+            payable(translates[_id_trans].sender).transfer(translates[_id_trans].sum);
+        }
     }
 
     //Регистрация
