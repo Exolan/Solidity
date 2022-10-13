@@ -37,25 +37,34 @@ async function drawFunction(contract, account){
 export default drawFunction
 
 async function drawChangeRoleFunction(element, contract, account, status){
-	console.log(status);
 	if(status){
 		let arrayApl = await contract.methods.viewAplications().call()
-		console.log(arrayApl);
 
 		drawRoleFunctionAdmin(element, arrayApl)
 
 		let buttonsConfrim = document.querySelector('.buttons-confrim')
-		let arrayButtons = buttonsConfrim.querySelectorAll('button')
 
-		for(let button of arrayButtons){
-			if(button.textContent == 'Принять'){
-				button.onclick = async ()=>{
-					await contract.methods.apl_admin_answer(button.id, true).send({from: account, gas: '999999999'})
-					arrayApl = await contract.methods.viewAplications().call()
-					drawRoleFunctionAdmin(element, arrayApl)
+		if(buttonsConfrim!=null){
+			let arrayButtons = buttonsConfrim.querySelectorAll('button')
+
+			for(let button of arrayButtons){
+				if(button.textContent == 'Принять'){
+					button.onclick = async ()=>{
+						await contract.methods.apl_admin_answer(button.id, true).send({from: account, gas: '999999999'})
+						arrayApl = await contract.methods.viewAplications().call()
+						drawRoleFunctionAdmin(element, arrayApl)
+					}
+				}
+				else{
+					button.onclick = async ()=>{
+						await contract.methods.apl_admin_answer(button.id, false).send({from: account, gas: '999999999'})
+						arrayApl = await contract.methods.viewAplications().call()
+						drawRoleFunctionAdmin(element, arrayApl)
+					}
 				}
 			}
 		}
+		
 	}
 	else{
 		let arrayApl = await contract.methods.viewAplications().call()
@@ -64,11 +73,13 @@ async function drawChangeRoleFunction(element, contract, account, status){
 
 		let button = document.querySelector('.button-send')
 
-		button.onclick = async ()=>{
-			await contract.methods.apl_change_status().send({from: account})
-			element.innerHTML = ``
-			arrayApl = await contract.methods.viewAplications().call()
-			drawRoleFunctionUser(element, arrayApl, account)
+		if(button!=null){
+			button.onclick = async ()=>{
+				await contract.methods.apl_change_status().send({from: account})
+				element.innerHTML = ``
+				arrayApl = await contract.methods.viewAplications().call()
+				drawRoleFunctionUser(element, arrayApl, account)
+			}
 		}
 	}
 }
@@ -80,25 +91,46 @@ function drawRoleFunctionAdmin(element, arrayApl){
 	for(let aplication of arrayApl){
 		if(!aplication[3]){
 			status = 'В обработке'
+			view+=`
+			<div class='aplication'>
+				<p>Адрес: ${aplication[1]}</p>
+				<p>Осталось подтверждений: ${aplication[2]}</p>
+				<p>Статус: ${status}</p>
+				<div class='buttons-confrim'>
+					<button id=${aplication[0]}>Принять</button>
+					<button id=${aplication[0]}>Отклонить</button>
+				</div>
+			</div>
+			`	
 		}
 		else if(aplication[3] & aplication[2]>0){
 			status = 'Отклонено'
+			view+=`
+			<div class='aplication'>
+				<p>Адрес: ${aplication[1]}</p>
+				<p>Осталось подтверждений: ${aplication[2]}</p>
+				<p>Статус: ${status}</p>
+				<div class='buttons-confrim'>
+					<button id=${aplication[0]} disabled>Принять</button>
+					<button id=${aplication[0]} disabled>Отклонить</button>
+				</div>
+			</div>
+			`	
 		}
 		else{
 			status = 'Завершено'
-		}
-
-		view+=`
-		<div class='aplication'>
-			<p>Адрес: ${aplication[1]}</p>
-			<p>Осталось подтверждений: ${aplication[2]}</p>
-			<p>Статус: ${status}</p>
-			<div class='buttons-confrim'>
-				<button id=${aplication[0]}>Принять</button>
-				<button id=${aplication[0]}>Отклонить</button>
+			view+=`
+			<div class='aplication'>
+				<p>Адрес: ${aplication[1]}</p>
+				<p>Осталось подтверждений: ${aplication[2]}</p>
+				<p>Статус: ${status}</p>
+				<div class='buttons-confrim'>
+					<button id=${aplication[0]} disabled>Принять</button>
+					<button id=${aplication[0]} disabled>Отклонить</button>
+				</div>
 			</div>
-		</div>
-		`	
+			`	
+		}
 	}
 
 	element.innerHTML = `
@@ -116,12 +148,10 @@ function drawRoleFunctionUser(element, arrayApl, account){
 	for(let aplication of arrayApl){
 		if(aplication[1] == account){
 			if(aplication[2] > 0 & aplication[3] == true){
-				view = `<p>Отказано</p>
-				<button class="button-send" disabled>Отправить</button>`
+				view = `<p>Отказано</p>`
 			}
 			else if(aplication[2] > 0 & aplication[3] != true){
-				view = `<p>В обработке</p>
-				<button class="button-send" disabled>Отправить</button>`
+				view = `<p>В обработке</p>`
 			}
 		}
 	}
