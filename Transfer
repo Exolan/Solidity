@@ -67,11 +67,11 @@ contract Perevod{
     constructor(){
         amount_admin = 2;   //По-началу админов 2
         //Адреса уже зарегестрированных пользователей
-        address admin2 = 0x4e72c0d85534bD93D49daD2b03176A4496e5E53B;
-        address polz1 = 0x68c56e81cc4cFDE95CCf0c91BE254B3E11824327;
-        address polz2 = 0x5A7dAF9382Ba8B17E88d2261dECB404C235a9627;
-        address polz3 = 0x23a602A1Bcbb50A2b032aa05b5C5CD1D96f18bfa;
-        address polz4 = 0xE9435fa3bfBa3C2a01981dE272aE17d2C4Fd0D6C;
+        address admin2 = 0xd089Caf61334d0E0d342F8C92d0536f28C91e934;
+        address polz1 = 0xB1fA103a2fe253cC59c7617bEFDf1E0DB1767d51;
+        address polz2 = 0xB094Bf863FbDf61b7a0F3BDe82a17a15ea45E310;
+        address polz3 = 0x2287601054459751cdB670fb0b682e0E1c77E4f0;
+        address polz4 = 0x7e3aEC3363F5E0a831B4b5ec5dA76F78Df4cE046;
         //Админы
         users[msg.sender] = User(msg.sender, keccak256(abi.encodePacked("1234")), true);
         users[admin2] = User(admin2, keccak256(abi.encodePacked("1234")), true);
@@ -150,6 +150,7 @@ contract Perevod{
     }
 
     function cancelTrans(uint _id_trans) public payable{
+        require(translates[_id_trans].sender == msg.sender, "You are not the sender!");
         require(translates[_id_trans].polz_confrim == false, "Already is late!");
         translates[_id_trans].end = true;
         if (translates[_id_trans].secure == true){
@@ -188,7 +189,7 @@ contract Perevod{
     }
 
     //Ответ на безопасный перевод
-    function secure_answer(uint _id_trans, bool answer_admin) public{
+    function secure_answer(uint _id_trans, bool answer_admin) public payable{
         require(users[msg.sender].check_admin == true, "You're not an admin!"); //Проверка на админа
         require(msg.sender != translates[_id_trans].sender, "You can not confrim translate to yourself!");  //Нельзя принять у самого себя
         require(translates[_id_trans].end != true, "Translate is over!");   //Проверка, завершена ли транзакция
