@@ -1,383 +1,261 @@
 body{
-    width: 100%;
-    height: 100%;
     margin: 0;
     padding: 0;
-    background: -webkit-linear-gradient(90deg, #9b9acc,#b6a1ca,#c9aac7);                      
-    background: linear-gradient(90deg, #9b9acc,#b6a1ca,#c9aac7);   
-    overflow: hidden;                                       
+    overflow: hidden;
 }
 
-h1, h2, h3, h4, h5{
-    font-family: 'Ubuntu';
-    font-size: 64px;
-    color: black;
+h1{
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+    font-size: 50px;
+    color: #E8EDE7;
     cursor: default;
 }
 
-a, p, span{
-    text-decoration: none;
-    font-family: 'Ubuntu';
-    font-size: 30px;
-    color: black;
+h3{
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+    font-size: 25px;
+    color: #E8EDE7;
+    cursor: default;
+}
+
+p{
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+    font-size: 15px;
+    color: #E8EDE7;
     cursor: default;
 }
 
 span{
-    cursor: pointer;
+    font-family: 'Fredoka One', cursive;
+    text-align: center;
+    font-size: 15px;
+    color: #E8EDE7;
+    cursor: default;
 }
 
-button{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+input:not(.secure){
+    all: unset;
+    font-family: 'Fredoka One', cursive;
+    color: #E8EDE7;    
+    padding-left: 10px;
     border: none;
-    border-radius: 20px;
-}
-
-button:hover{
-    background: #9b9acc;
+    border-radius: 10px;
+    background-color: #81BECE;
 }
 
 input::placeholder{
-    font-family: 'Ubuntu';
+    font-family: 'Fredoka One', cursive;
+    color: #eeeeee;
 }
 
-.modals{
-    display: grid;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    padding-top: 80px;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.8);                          
-}
-
-.modal-avtorization{
-    display: grid;
-    justify-content: center;
-    border: 3px solid black;
-    border-radius: 3%;
-    width: max-content;
-    height: max-content;
-    gap: 130px;
-    background-color: #b6a1ca;                                                                
-}
-
-.modal-registration{
-    display: none;
-    justify-content: center;
-    border: 3px solid black;
-    border-radius: 3%;
-    width: max-content;
-    height: max-content;
-    gap: 130px;
-    background-color: #b6a1ca;    
-}
-
-.modals header{
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    height: max-content;
-}
-
-.modals main{
-    display: grid;
-    gap: 40px;
-}
-
-.modals input{
-    margin-left: 30px;
-    margin-right: 30px;
-    width: 600px;
-    height: 50px;
-    font-size: 40px;
-    border: 3px solid black;
-    border-radius: 10px;
-}
-
-.modals input::placeholder{
-    font-size: 30px;
-}
-
-.modals footer{
-    display: grid;
-    gap: 10px;
-    margin-bottom: 40px;
-    justify-content: center;
-    width: 100%;
-}
-
-.modal-button-enter, .modal-button-make{
-    border: 3px solid black;
-    border-radius: 20px;
-    background-color: white;
-    width: 300px;
-    height: 100px;
-}
-
-.modal-button-enter:hover, .modal-button-make:hover{
-    background-color: aquamarine;
-}
-
-.modal-button-reg, .modal-button-back{
+button{
     border: none;
-    background-color: inherit;
-}
-
-.modal-button-reg span, .modal-button-back span{
-    color:rgb(153, 153, 153);
-    text-decoration: underline rgb(153, 153, 153);
-}
-
-.modal-button-reg span:hover, .modal-button-back span:hover{
-    color:rgb(5, 5, 5);
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.modal-transfers{
-    display: none;
-    padding: 25px;
-    z-index: 2;
-    justify-content: center;
-    border-radius: 3%;
-    width: max-content;
-    height: 800px;
-    gap: 80px;
-    background-color: wheat;   
-}
-
-.modal-transfers .modal-conteiner{
-    overflow-y: auto;
-    padding-right: 10px;
-}
-
-.modal-transfers .modal-conteiner::-webkit-scrollbar{
-    width: 6px;
-    background: none;
-}
-
-.modal-transfers .modal-conteiner::-webkit-scrollbar-thumb{
-    background: #B7BDCB;
-    box-shadow: 4px 4px 15px rgba(112, 124, 151, 0.05), 2px 2px 10px rgba(112, 124, 151, 0.1), 1px 1px 50px rgba(112, 124, 151, 0.15);
     border-radius: 10px;
-}
-
-.modal-transfers header{
-    position: relative;
-}
-
-.modal-transfers img{
+    font-family: 'Fredoka One', cursive;
+    color: #E8EDE7;
     cursor: pointer;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    left: auto;
+    background-color: #036280;
 }
 
-.modal-transfers .transfer{
-    display: flex;
-    align-items: center;
-    background-color: #b6a1ca;
-    border-radius: 10px;
-    padding: 20px;
-    gap: 30px;
+button:hover{
+    transform: translateY(-5px);
+    box-shadow: 0 8px 8px -6px rgba(0, 0, 0, 0.5);
 }
 
-.modal-transfers .transfer p{
-    font-size: 18px;
-}
-
-.modal-transfers .transfer h3{
-    font-size: 30px;
-}
-
-.modal-transfers .transfer span{
-    font-size: 18px;
-}
-
-.button-cancel{
-    display: flex;
-    justify-content: center;
-}
+/*  */
+/*  */
+/*  */
+/* Главная страница */
+/*  */
+/*  */
+/*  */
 
 .conteiner{
-    display: none;
     width: 100%;
-    height: 100%;
+    display: grid;
+    justify-content: center;
+    gap: 20px;
+    background-color: #81BECE;
+    overflow: hidden;
 }
 
 .conteiner-header{
-    display: grid;
-    justify-content: center;
-}
-
-.conteiner .conteiner-title{
+    width: 100%;
+    height: max-content;
     display: flex;
     justify-content: center;
 }
 
-.conteiner .profile{
+.conteiner-pannel{
     display: flex;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
+    width: 100%;
+    height: 100px;
     justify-content: center;
-    align-items: center;
     gap: 30px;
-    background-color: antiquewhite;
-}
-
-.conteiner .profile button{
-    border: none;
+    background-color: #378BA4;
     border-radius: 10px;
-    background-color: #ffffff;
-    width: 100px;
-    height: 40px;
+    padding: 10px;
 }
 
-.conteiner .profile button span{
-   font-size: 15px;
+.conteiner-pannel h3{
+    cursor: pointer;
 }
 
-.conteiner .profile p{
-    text-align: center;
+.conteiner-pannel h3:hover{
+    color: bisque;
 }
 
 .conteiner-main{
     display: flex;
     justify-content: center;
-}
-
-.conteiner-footer{
-    display: flex;
-}
-
-.my-function{
-    display: grid;
+    background-color: #378BA4;
     border-radius: 10px;
-    padding: 70px;
-    width: max-content;
-    height: 400px;
-    margin-top: 60px;
-    gap: 10px;
-    background-color: antiquewhite;
-    overflow-y: auto;
+    width: 100%;
+    height: 650px;
+    gap: 30px;
+    margin-bottom: 50px;
 }
 
-.my-function span{
+.conteiner .transfer{
+    margin: 40px;
+    padding: 40px;
+    width: 300px;
     display: grid;
     justify-content: center;
-    font-size: 10px;
+    gap: 30px;
+    border-radius: 10px;
+    background-color: #012E4A;
 }
 
-.my-function div{
+.conteiner .transfer select, option{
+    font-family: 'Fredoka One', cursive;
+    color: #E8EDE7;
+    background-color: #81BECE;
+}
+
+.conteiner .transfer select{
+    border-radius: 10px;
+}
+
+.conteiner .add-trans{
+    height: 50px;
+}
+
+.conteiner-profile{
+    margin: 40px;
+    padding: 40px;
+    width: 500px;
     display: grid;
     justify-content: center;
     border-radius: 10px;
-    padding: 20px;
-    background-color: #c9aac7;
+    background-color: #012E4A;
 }
 
-.my-function header{
-    display: flex;
-    padding-left: 20px;
-    justify-content: left;
-}
-
-.my-function header h3{
-    text-align: left;
-    font-size: 25px;
-}
-
-.my-function .body-function{
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.my-function input{
-    border: none;
-    border-radius: 10px;
-    width: 130px;
-    height: 40px;
-}
-
-.my-function select{
-    border: none;
-    border-radius: 10px;
-    width: 130px;
-    height: 40px;
-}
-
-.my-function .secure-button{
-    padding: 0;
-    display: flex;
-    background-color: #ffffff;
-    width: 140px;
-    height: 45px;
-    gap: 5px;
-    align-items: center;
-}
-
-.my-function .secure-button p{
-    text-align: center;
-    font-size: 13px;
-}
-
-.my-function .secure-button button{
-    margin-right: 5px;
-    border-radius: 10px;
-    width: 24px;
-    height: 24px;
-    background-color: rgb(247, 148, 144);
-}
-
-.my-function .secure-button button span{
-  font-size: 13px;
-}
-
-.my-function .button-confrim{
-    display: flex;
-    justify-content: left;
-    width: 130px;
-    height: 40px;
-}
-
-.my-function .button-confrim button{
-   background-color: #9b9acc;
-}
-
-.my-function .aplication{
-    display: grid;
-    justify-content: left;
-    width: 950px;
-    background-color: antiquewhite;
-}
-
-.my-function .aplication p{
+.conteiner-profile h3{
     font-size: 20px;
 }
 
-.my-function .buttons-confrim{
+.conteiner-profile main{
+    display: grid;
+    gap: 20px;
+}
+
+.conteiner-profile .exit{
     display: flex;
-    justify-content: left;
+    justify-content: center;
+}
+
+.conteiner .history{
+    margin: 40px;
+    padding: 40px;
+    width: 500px;
+    height: 490px;
+    display: grid;
+    justify-content: center;
     gap: 30px;
-    background: inherit;
+    border-radius: 10px;
+    background-color: #012E4A;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-.my-function .buttons-confrim button{
-    width: 100px;
-    height: 50px;
-    background-color: #ffffff;
+.conteiner .history .info-trans{
+    display: grid;
+    background-color: #378BA4;
+    border-radius: 10px;
+    padding: 20px;
 }
 
+/*  */
+/*  */
+/*  */
+/* Модалки */
+/*  */
+/*  */
+/*  */
+
+.modals{
+    display: grid;
+    padding-top: 100px;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.modals input{
+    width: 400px;
+    height: 60px;
+    font-size: 30px;
+}
+
+.modals button{
+    width: max-content;
+    height: 60px;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.modal-a{
+    display: grid;
+    width: max-content;
+    height: max-content;
+    gap: 20px;
+    padding: 30px;
+    justify-content: center;
+    background-color: #378BA4;
+    border: none;
+    border-radius: 10px;
+}
+
+.modal-r{
+    display: none;
+    justify-content: center;
+    width: max-content;
+    height: max-content;
+    gap: 20px;
+    padding: 30px;
+    justify-content: center;
+    background-color: #378BA4;
+    border: none;
+    border-radius: 10px;
+}
+
+.modal-conteiner{
+    display: grid;
+    width: max-content;
+    gap: 30px;
+    justify-content: center;
+}
+
+.modal-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
