@@ -98,30 +98,32 @@ async function drawHistory(sender, el, historyTrans, trans, contract, addressAcc
         }
     }
 
-    const id = (historyTrans.querySelector(".info-trans")).id
+    const id = trans.id_trans
 
     if(sender){
-        const button = historyTrans.querySelector(".button-cancle-sender")
+        const button = infoTrans.querySelector(".button-cancle-sender")
 
         button.onclick = async()=>{
-            await contract.methods.cancelTrans(Number(id)).send({from: addressAccount, gas: '199999999'})
+            await contract.methods.cancelTrans(id).send({from: addressAccount, gas: '199999999'})
             alert("Перевод отменен!")
             checkTrans(contract, addressAccount, main)
         }
     }
     else{
-        const buttonCancle = historyTrans.querySelector(".button-cancle-user")
-        const buttonAccept = historyTrans.querySelector(".button-accept-user")
-        const codeW = historyTrans.querySelector(".code-word")
+        const buttonCancle = infoTrans.querySelector(".button-cancle-user")
+        const buttonAccept = infoTrans.querySelector(".button-accept-user")
+        const codeW = infoTrans.querySelector(".code-word")
 
         buttonCancle.onclick = async()=>{
-            await contract.methods.recipient_answer(Number(id), codeW.value, false).send({from: addressAccount, gas: '199999999'})
+            console.log(id);
+            await contract.methods.recipient_answer(id, codeW.value, false).send({from: addressAccount, gas: '199999999'})
             alert("Отказано в переводе!")
             checkTrans(contract, addressAccount, main)
         }
 
         buttonAccept.onclick = async()=>{
-            await contract.methods.recipient_answer(Number(id), codeW.value, true).send({from: addressAccount, gas: '199999999'})
+            console.log(id);
+            await contract.methods.recipient_answer(id, codeW.value, true).send({from: addressAccount, gas: '199999999'})
             checkTrans(contract, addressAccount, main)
         }
     }

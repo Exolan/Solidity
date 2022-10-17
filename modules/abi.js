@@ -2,6 +2,42 @@ export const abi = [
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "name_cat",
+				"type": "string"
+			}
+		],
+		"name": "add_cat",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name_samp",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "sum",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "id_cat",
+				"type": "uint256"
+			}
+		],
+		"name": "add_samp",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "_recipient",
 				"type": "address"

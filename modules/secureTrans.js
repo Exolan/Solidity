@@ -12,21 +12,21 @@ async function secureTrans(contract, addressAccount, main){
 
     main.innerHTML += `<div class="secure"></div>`
 
-    const secureTrans = main.querySelector(".secure")
+    const secure = main.querySelector(".secure")
 
     for(const trans of arrayTrans){
         if(trans.sender != addressAccount && trans.recipient != addressAccount && trans.secure == true){
-            drawSecure(secureTrans, trans, contract, addressAccount, main)
+            drawSecure(secure, trans, contract, addressAccount, main)
         }
     }
 }
 
 export default secureTrans
 
-async function drawSecure(secureTrans, trans, contract, addressAccount, main){
+async function drawSecure(secure, trans, contract, addressAccount, main){
     const element = document.createElement('div')
     element.className = "el-secure"
-    secureTrans.append(element)
+    secure.append(element)
 
     element.innerHTML = `
     <div><p>Отправитель: ${trans.sender}</p></div>
