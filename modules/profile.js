@@ -39,10 +39,10 @@ async function profile(contract, addressAccount, main, web3){
 
     let button = document.querySelector('.button-exit')
 
-    button.onclick = ()=>{
+    button.addEventListener('click', ()=>{
         main.innerHTML = ``
         modalAvtorization(contract, addressAccount, web3)
-    }
+    })
 }
 
 export default profile

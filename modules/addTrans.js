@@ -5,9 +5,12 @@ async function addTrans(contract, addressAccount, main){
     for(let el of main.children){
         if(amount > 0){
             el.remove()
+            console.log(111);
         }
         amount++
     }
+
+    console.log(main.children);
 
     const arrayCats = await contract.methods.viewCat().call()
     const arraySamples = await contract.methods.viewSamples().call()

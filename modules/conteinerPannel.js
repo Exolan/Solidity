@@ -38,43 +38,43 @@ async function conteinerPannel(contract, addressAccount, conteiner){
     for (let element of needDivs){
         switch(element.id){
             case "0":
-                element.onclick = async()=>{
-                    await addTrans(contract, addressAccount, main)
+                element.onclick = ()=>{
+                    addTrans(contract, addressAccount, main)
                 }
                 break
 
             case "1":
-                element.onclick = async()=>{
-                    await checkTrans(contract, addressAccount, main)
+                element.onclick = ()=>{
+                    checkTrans(contract, addressAccount, main)
                 }
                 break
 
             case "2":
-                element.onclick = async()=>{
-                    await secureTrans(contract, addressAccount, main)
+                element.onclick = ()=>{
+                    secureTrans(contract, addressAccount, main)
                 }
                 break
 
             case "3":
-                element.onclick = async()=>{
-                    await changeRole(contract, addressAccount, main)
+                element.onclick = ()=>{
+                    changeRole(contract, addressAccount, main)
                 }
                 break
 
             case "4":
-                element.onclick = async()=>{
-                    await votingAdmin(contract, addressAccount, main)
+                element.onclick = ()=>{
+                    votingAdmin(contract, addressAccount, main)
                 }
                 break
 
             case "5":
-                element.onclick = async()=>{
+                element.onclick = ()=>{
                     console.log("Категории");
                 }
                 break
 
             case "6":
-                element.onclick = async()=>{
+                element.onclick = ()=>{
                     console.log("Шаблоны");
                 }
                 break
