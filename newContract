@@ -1,0 +1,36 @@
+pragma solidity ^0.8.7;
+
+contract WebShop{
+
+    struct Person{
+        uint id_person;
+        string name;
+        bytes32 password;
+        string role;
+    }
+
+    struct Shop{
+        uint id_shop;
+        uint rating;
+        Person[] workers;
+    }
+
+    struct Comment{
+        uint id_comment;
+        uint id_shop;
+        address user;
+        string comment;
+        uint likes;
+        uint dislikes;
+        uint rate;
+        Comment[] answers;
+    }
+
+    mapping(address => Person) public peoples;
+    mapping(address => Shop) public shops;
+    Comment[] public comments;
+
+    constructor(){
+        
+    }
+}
