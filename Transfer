@@ -1,4 +1,4 @@
-pragma solidity ^0.8.7;
+pragma solidity ^0.8.0;
 
 contract Perevod{
 
@@ -227,7 +227,12 @@ contract Perevod{
             if (keccak256(abi.encodePacked((_code_word))) == keccak256(abi.encodePacked((translates[_id_trans].code_word)))){
                 translates[_id_trans].polz_confrim = true;
                 translates[_id_trans].end = true;
-                payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
+                if (translates[_id_trans].secure == true){
+                        payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum - (translates[_id_trans].sum / 10));
+                    }
+                    else{
+                        payable(translates[_id_trans].recipient).transfer(translates[_id_trans].sum);
+                    }
             }
             else{
                 translates[_id_trans].attempts -= 1;
