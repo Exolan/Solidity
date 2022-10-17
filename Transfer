@@ -98,6 +98,19 @@ contract Perevod{
         samples.push(Sample(samples.length, categorys[2].id_cat, "Pogasheniye zadolgnosti", 90));
     }
 
+    //Функция добавления категории(проверка потвтора на интерфейсе)
+    function add_cat (string memory name_cat) public{
+        require(users[msg.sender].check_admin == true, "You are not an admin!");
+        categorys.push(Category(categorys.length, name_cat));
+    }
+
+    //Функция добавления шаблона
+    function add_samp (string memory name_samp, uint sum, uint id_cat) public {
+        require(users[msg.sender].check_admin == true, "You are not an admin!");
+        require(categorys.length >= id_cat, "This category is not exist!");
+        samples.push(Sample(samples.length, id_cat, name_samp, sum));
+    }
+
     //Функция создания заявки на смену роли
     function apl_change_status() public{
         require (users[msg.sender].check_admin != true, "You are already the admin!");   //Проверка, админ ли вы или нет
