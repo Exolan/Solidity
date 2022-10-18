@@ -1,29 +1,38 @@
 pragma solidity ^0.8.7;
 
 contract WebShop{
-
+    //Стркутура пользователя
     struct Person{
         uint id_person;
-        string name;
+        string name;        //Имя профиля
         bytes32 password;
-        string role;
+        uint role;          //0 - админ, 1 - продавец, 2 - пользователь
     }
-
+    //Стркутура магазина
     struct Shop{
         uint id_shop;
-        uint rating;
-        Person[] workers;
+        uint rating;        //Рейтинг магазина
+        Person[] workers;   //Массив с продавцами
     }
-
-    struct Comment{
+    //Стркутура ответа на комментарий
+    struct Answer{
+        uint id_answer;
         uint id_comment;
-        uint id_shop;
         address user;
-        string comment;
+        string answer;
         uint likes;
         uint dislikes;
-        uint rate;
-        Comment[] answers;
+    }
+    //Стркутура комментария
+    struct Comment{
+        uint id_comment;
+        uint id_shop;       //ID магазина, которму соответствует коментарий
+        address user;       //Адрес комментатора
+        string comment;     //Сам коммент
+        uint likes;         //Число лайков
+        uint dislikes;      //Число дизлайков
+        uint rate;          //Оценка комментатора
+        Answer[] answers;  //Массив ответов на данный комментарий
     }
 
     mapping(address => Person) public peoples;
@@ -33,4 +42,13 @@ contract WebShop{
     constructor(){
         
     }
+
+    function changeRole(address person, uint newRole) public {
+        require(peoples[msg.sender].role == 0, "You're not an admin!");
+        require(newRole != 0, "You can not change role on admin!");
+        require(peoples[person].role != newRole, "User already has this role!");
+        peoples[person].role = newRole;
+    }
+
+    function addNewAdmin()
 }
