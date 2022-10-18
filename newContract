@@ -4,6 +4,7 @@ contract WebShop{
     //Стркутура пользователя
     struct Person{
         string name;        //Имя профиля
+        address login;
         bytes32 password;
         uint role;          //0 - админ, 1 - продавец, 2 - пользователь
         uint activeRole;
@@ -11,46 +12,239 @@ contract WebShop{
     //Стркутура магазина
     struct Shop{
         uint id_shop;
+        address address_shop;
         string city;
-        Person[] workers;   //Массив с продавцами
+        address[] workers;      //Массив с продавцами
         Review[] book;
+    }
+    //Стркутура оценки
+    struct Score{
+        address user;       //Адрес оценщика
+        bool like;          //True - лайк, false - дизлайк
     }
     //Стркутура ответа на комментарий
     struct Comment{
-        uint id_answer;
+        uint id_review;
         uint id_comment;
         address user;
-        string answer;
+        string comment;
         Score[] scores;
     }
     //Стркутура комментария
     struct Review{
-        uint id_comment;
-        uint id_shop;       //ID магазина, которму соответствует коментарий
-        address user;       //Адрес комментатора
-        string comment;     //Сам коммент
+        uint id_review;
+        uint id_shop;           //ID магазина, которму соответствует коментарий
+        address user;           //Адрес комментатора
+        string review;         //Сам отзыв
         Score[] scores;
-        uint rate;          //Оценка комментатора
-        Comment[] comments;  //Массив ответов на данный комментарий
+        uint rate;              //Оценка комментатора
+        Comment[] comments;     //Массив ответов на данный комментарий
+    }
+    //Структура запросов
+    struct Request{
+        address requesting;
+        uint haveRole;
+        uint newRole;
+        uint admin_answer;      //1 - да, 0 - нет
+        bool isEnd;
     }
 
-    mapping(address => Person) public peoples;
-    Shop[] public shops;
+    mapping(address => Person) public peoples;      //Мапинг людей в системе
+    Shop[] public shops;        //Массив магазинов
+    Request[] public requests;      //Массив запросов
 
     constructor(){
-        peoples[msg.sender] = Person("Coco Jamba", keccak256(abi.encodePacked("1234")), 0, 0);
+        //Админы
+        peoples[msg.sender] = Person("Coco Jamba", msg.sender, keccak256(abi.encodePacked("1234")), 0, 0);
+        peoples[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2] = Person("Luda Ludoed", 0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2, keccak256(abi.encodePacked("1234")), 0, 0);
+        //Продавцы
+        peoples[0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db] = Person("Jigan Limon", 0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db, keccak256(abi.encodePacked("1234")), 1, 1);
+        peoples[0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB] = Person("Alisher Tagirovich", 0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB, keccak256(abi.encodePacked("1234")), 1, 1);
+        peoples[0x617F2E2fD72FD9D5503197092aC168c91465E7f2] = Person("Lisiy Slenderman", 0x617F2E2fD72FD9D5503197092aC168c91465E7f2, keccak256(abi.encodePacked("1234")), 1, 1);
+        peoples[0x17F6AD8Ef982297579C203069C1DbfFE4348c372] = Person("Kanye North", 0x17F6AD8Ef982297579C203069C1DbfFE4348c372, keccak256(abi.encodePacked("1234")), 1, 1);
+        //Покупатели
+        peoples[0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678] = Person("Cristiano Ronaldo", 0x5c6B0f7Bf3E7ce046039Bd8FABdfD3f9F5021678, keccak256(abi.encodePacked("1234")), 2, 2);
+        peoples[0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7] = Person("Pasha Tehnick", 0x03C6FcED478cBbC9a4FAB34eF9f40767739D1Ff7, keccak256(abi.encodePacked("1234")), 2, 2);
 
-        Shop storage newShop = shops.push();
-        newShop.id_shop = 0;
-        newShop.city = "Kaluga";
+
+        Shop storage newShop1 = shops.push();
+        newShop1.address_shop = 0x1aE0EA34a72D944a8C7603FfB3eC30a6669E454C;
+        newShop1.id_shop = 0;
+        newShop1.city = "Kaluga";
+        newShop1.workers.push(0x4B20993Bc481177ec7E8f571ceCaE8A9e22C02db);
+        newShop1.workers.push(0x78731D3Ca6b7E34aC0F824c42a7cC18A495cabaB);
+
+        Shop storage newShop2 = shops.push();
+        newShop2.address_shop = 0x0A098Eda01Ce92ff4A4CCb7A4fFFb5A43EBC70DC;
+        newShop2.id_shop = 1;
+        newShop2.city = "Moscow";
+        newShop2.workers.push(0x617F2E2fD72FD9D5503197092aC168c91465E7f2);
+        newShop2.workers.push(0x17F6AD8Ef982297579C203069C1DbfFE4348c372);
+
     }
 
-    function changeRole(address person, uint newRole) public {
+    function viewShops() public view returns(Shop[] memory){
+        return shops;
+    }
+
+    function viewWorkers(uint id_shop) public view returns(address[] memory){
+        return shops[id_shop].workers;
+    }
+
+    function viewReviews(uint id_shop) public view returns(Review[] memory){
+        return shops[id_shop].book;
+    }
+
+    function viewComments(uint id_shop, uint id_review) public view returns(Comment[] memory){
+        return shops[id_shop].book[id_review].comments;
+    }
+
+    //Функции админа
+
+    function changeUserRole(address person, uint newRole, uint id_shop) public {
         require(peoples[msg.sender].role == 0, "You're not an admin!");
         require(newRole != 0, "You can not change role on admin!");
         require(peoples[person].role != newRole, "User already has this role!");
+        if(newRole == 1){
+            shops[id_shop].workers.push(person);
+        }
+        else{
+            for(uint i = 0; i < shops.length; i++){
+                for(uint j = 0; j < shops[i].workers.length; j++){
+                    if(shops[i].workers[j] == person){
+                        delete shops[i].workers[j];
+                    }
+                }
+            }
+        }
         peoples[person].role = newRole;
+        peoples[person].activeRole = newRole;
     }
 
-    function addNewAdmin()
+    function changeRoleAdmin() public {
+        require(peoples[msg.sender].role == 0, "You're not an admin!");
+        if(peoples[msg.sender].activeRole == 0){
+            peoples[msg.sender].activeRole = 1;
+        }
+        else{
+            peoples[msg.sender].activeRole = 0;
+        }
+    }
+
+    // function addNewAdmin(address person) public {
+    //     require(peoples[msg.sender].role == 0, "You're not an admin!");
+    // }
+
+    function addNewShop(address newShop, string memory city) public {
+        require(peoples[msg.sender].role == 0, "You're not an admin!");
+        for(uint i = 0; i <= shops.length; i++){
+            require(shops[i].address_shop != newShop, "Address already exist!");
+        }
+        require(peoples[newShop].login != newShop, "Address already exist!");
+        Shop storage newShop1 = shops.push();
+        newShop1.address_shop = newShop;
+        newShop1.id_shop = shops.length;
+        newShop1.city = city;
+
+        // Review storage newReview = newShop1.book.push();
+    }
+
+    function deleteShop(uint id_shop) public {
+        require(peoples[msg.sender].role == 0, "You're not an admin!");
+        require(id_shop <= shops.length, "This shop is not exist!");
+        for(uint i = 0; i < shops[id_shop].workers.length; i++){
+            changeUserRole(shops[id_shop].workers[i], 2, 0);
+        }
+        delete shops[id_shop];
+    }
+
+     function answerToRequest(uint id_request, uint answer, uint id_shop) public {
+        require(peoples[msg.sender].role == 0, "You're not the admin!");
+        require(requests[id_request].isEnd == false, "Already answered!");
+        if(answer == 0){
+            requests[id_request].admin_answer = 0;
+            requests[id_request].isEnd = true;
+        }
+        else{
+            if(requests[id_request].haveRole == 1){
+                for(uint i = 0; i < shops.length; i++){
+                    for(uint j = 0; j < shops[i].workers.length; j++){
+                            if(shops[i].workers[j] == msg.sender){
+                                delete shops[i].workers[j];
+                            }
+                    }
+                }
+                peoples[msg.sender].role = 2;
+                peoples[msg.sender].activeRole = 2;
+            }
+            else{
+                shops[id_shop].workers.push(msg.sender);
+                peoples[msg.sender].role = 1;
+                peoples[msg.sender].activeRole = 1;
+            }
+        }
+    }     
+
+    //Функции покупателя
+    function addReview(uint id_shop, string memory comment, uint rate) public {
+        require(peoples[msg.sender].role == 2, "You're not the user!");
+        require(id_shop <= shops.length, "This shop is not exist!");
+        if(peoples[msg.sender].role == 1){
+            for(uint i = 0; i < shops[id_shop].workers.length; i++){
+                require(msg.sender != shops[id_shop].workers[i], "You can not add review to your shop!");
+            }
+        }
+        Review storage newReview = shops[id_shop].book.push();
+        newReview.id_review = shops[id_shop].book.length;
+        newReview.id_shop = id_shop;
+        newReview.user = msg.sender;
+        newReview.review = comment;
+        newReview.rate = rate;
+    }
+
+    //Функции продавца
+    function changeRoleWorker() public {
+        require(peoples[msg.sender].role == 1, "You're the worker!");
+        if(peoples[msg.sender].activeRole == 1){
+            peoples[msg.sender].activeRole = 2;
+        }
+        else{
+            peoples[msg.sender].activeRole = 1;
+        }
+    }
+    //Общие функции
+    function addComment(uint id_shop, uint id_review, string memory comment) public {
+        require(peoples[msg.sender].activeRole != 0, "You're the admin!");
+        require(id_review <= shops[id_shop].book.length, "This review is not exist!");
+        Comment storage newComment = shops[id_shop].book[id_review].comments.push();
+        newComment.id_review = id_review;
+        newComment.id_comment = shops[id_shop].book[id_review].comments.length;
+        newComment.user = msg.sender;
+        newComment.comment = comment;
+    }    
+
+    function requestToChangeRole() public {
+        require(peoples[msg.sender].role != 0, "You're the admin!");
+        if(peoples[msg.sender].role == 1){
+            requests.push(Request(msg.sender, 1, 2, 0, false));
+        }
+        else{
+            requests.push(Request(msg.sender, 1, 2, 0, false));
+        }
+    }
+
+    function addScoreReview(uint id_shop, uint id_review, bool score) public {
+        require(shops[id_shop].book.length >= id_review, "This review is not exist!");
+        for(uint i = 0; i < shops[id_shop].book[id_review].scores.length; i++){
+            require(shops[id_shop].book[id_review].scores[i].user != msg.sender, "You have already scoring!");
+        }
+        shops[id_shop].book[id_review].scores.push(Score(msg.sender, score));
+    }
+
+    function removeScoreReview(uint id_shop, uint id_review, uint id_score) public {
+        require(shops[id_shop].book.length >= id_review, "This review is not exist!");
+        require(shops[id_shop].book[id_review].scores.length >= id_score, "This score is not exist!");
+        require(shops[id_shop].book[id_review].scores[id_score].user == msg.sender, "This score is not yours!");
+        delete shops[id_shop].book[id_review].scores[id_score];
+    }
 }
