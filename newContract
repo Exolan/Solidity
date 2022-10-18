@@ -3,44 +3,46 @@ pragma solidity ^0.8.7;
 contract WebShop{
     //Стркутура пользователя
     struct Person{
-        uint id_person;
         string name;        //Имя профиля
         bytes32 password;
         uint role;          //0 - админ, 1 - продавец, 2 - пользователь
+        uint activeRole;
     }
     //Стркутура магазина
     struct Shop{
         uint id_shop;
-        uint rating;        //Рейтинг магазина
+        string city;
         Person[] workers;   //Массив с продавцами
+        Review[] book;
     }
     //Стркутура ответа на комментарий
-    struct Answer{
+    struct Comment{
         uint id_answer;
         uint id_comment;
         address user;
         string answer;
-        uint likes;
-        uint dislikes;
+        Score[] scores;
     }
     //Стркутура комментария
-    struct Comment{
+    struct Review{
         uint id_comment;
         uint id_shop;       //ID магазина, которму соответствует коментарий
         address user;       //Адрес комментатора
         string comment;     //Сам коммент
-        uint likes;         //Число лайков
-        uint dislikes;      //Число дизлайков
+        Score[] scores;
         uint rate;          //Оценка комментатора
-        Answer[] answers;  //Массив ответов на данный комментарий
+        Comment[] comments;  //Массив ответов на данный комментарий
     }
 
     mapping(address => Person) public peoples;
-    mapping(address => Shop) public shops;
-    Comment[] public comments;
+    Shop[] public shops;
 
     constructor(){
-        
+        peoples[msg.sender] = Person("Coco Jamba", keccak256(abi.encodePacked("1234")), 0, 0);
+
+        Shop storage newShop = shops.push();
+        newShop.id_shop = 0;
+        newShop.city = "Kaluga";
     }
 
     function changeRole(address person, uint newRole) public {
