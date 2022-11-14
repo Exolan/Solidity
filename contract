@@ -1,0 +1,272 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.7;
+
+contract WebShops{
+    struct Worker{
+        address user;
+        bool status;
+    }
+
+    struct Event{
+        uint type_event;    //0 - ответ на заявку, 1 - l добавление админа
+        uint id_event;      //id события
+    }
+
+    struct Score{
+        uint id_score;
+        address user;
+        bool score;
+    }
+
+    struct Comment{
+        uint id_comment;
+        address user;
+        string comment_text;
+        Score[] scores;
+    }
+
+    struct Review{
+        uint id_review;
+        address user;
+        string review_text;
+        uint rate;
+        Comment[] comments;
+        Score[] scores;
+    }
+
+    struct Shop{
+        uint id_shop;
+        address address_shop;
+        bytes32 password_shop;
+        string city_shop;
+        Worker[] workers;
+        Review[] reviews;
+    }
+
+    struct User{
+        uint id_user;
+        string login;
+        bytes32 password_user;
+        string fio_user;
+        string city_user;
+        uint role;
+        uint active_role;
+    }
+
+    struct Request{
+        uint id_request;
+        address user;
+        uint new_role;
+        uint id_shop;
+        bool admin_answer;
+        bool is_end;
+    }
+
+    mapping(address => User) public users;
+    Shop[] public shops;
+    mapping(address => Event) public history;
+    Request[] public requests;
+
+    constructor(){
+        users
+    }
+
+    //Полезные ретёрны
+    function showShops() public view returns(Shop[] memory){
+        return shops;
+    }
+
+    function showUser(address user) public view returns(User memory){
+        return users[user];
+    }
+
+    function showRequests() public view returns(Request[] memory){
+        return requests;
+    }
+
+    function showHistory(address user) public view returns(Event memory){
+        return history[user];
+    }
+
+    //Функции админа
+    function answerRequest(uint id_request, bool answer) public{
+        require(users[msg.sender].role == 0, "You're not the admin!");
+        require(id_request < requests.length, "This request is not exist!");
+        require(requests[id_request].is_end != true, "This request is already finishing!");
+
+        if(answer == true){
+            if(users[requests[id_request].user].role == 1){
+                for(uint i = 0; i < shops.length; i++){
+                    for(uint j = 0; j < shops[i].workers.length; j++){
+                        if(shops[i].workers[j].user == requests[id_request].user){
+                            if(shops[i].workers[j].user == requests[id_request].user){
+                                shops[i].workers[j].status = false;
+                                users[requests[id_request].user].role = 2;
+                                users[requests[id_request].user].active_role = 2;
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                shops[requests[id_request].id_shop].workers.push(Worker(requests[id_request].user, true));
+                users[requests[id_request].user].role = 1;
+                users[requests[id_request].user].active_role = 1;
+            }
+        }
+        requests[id_request].admin_answer = answer;
+        requests[id_request].is_end = true;
+        history[msg.sender] = Event(0, id_request);
+    }
+
+    function addNewAdmin(address user) public{
+        require(users[msg.sender].role == 0, "You're not the admin!");
+        require(keccak256(abi.encodePacked(users[msg.sender].login)) != keccak256(abi.encodePacked('')), "This user is not exist!");
+        if(users[user].role == 1){
+            for(uint i = 0; i < shops.length; i++){
+                for(uint j = 0; j < shops[i].workers.length; j++){
+                    if(shops[i].workers[j].user == user){
+                        shops[i].workers[j].status = false;
+                        users[user].role = 2;
+                        users[user].active_role = 2;
+                    }
+                }
+            }
+        }
+        users[user].role = 0;
+        users[user].active_role = 0;
+
+        //Добавление в историю
+    }
+
+    function addNewShop(address new_shop, bytes32 password_shop, string memory city_shop) public{
+        require(users[msg.sender].role == 0, "You're not the admin!");
+        require(keccak256(abi.encodePacked(users[msg.sender].login)) == keccak256(abi.encodePacked('')), "This address is already exist!");
+        for(uint i = 0; i < shops.length; i++){
+            require(shops[i].address_shop != new_shop, "This shop is already exist!");
+        }
+        Shop storage newShop = shops.push();
+        newShop.id_shop = shops.length - 1;
+        newShop.address_shop = new_shop;
+        newShop.password_shop = password_shop;
+        newShop.city_shop = city_shop;
+        //Добавление в историю
+    }
+
+    function deleteShop(uint id_shop) public{
+        require(users[msg.sender].role == 0, "You're not the admin!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        if(shops[id_shop].workers.length != 0){
+            for(uint j = 0; j < shops[id_shop].workers.length; j++){
+                users[shops[id_shop].workers[j].user].role = 2;
+                users[shops[id_shop].workers[j].user].active_role = 2;
+                shops[id_shop].workers[j].status = false;
+            }
+        }
+        for(uint i = id_shop; i < shops.length; i++){
+            shops[i] = shops[i+1];
+        }
+        shops.pop();
+        //Добавление в историю
+    }
+
+    //Функции покупателя
+    function addReview(uint id_shop, string memory review_text, uint rate) public{
+        require(users[msg.sender].role == 2, "You're not the buyer!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        Review storage newReview = shops[id_shop].reviews.push();
+        newReview.id_review = shops[id_shop].reviews.length - 1;
+        newReview.user = msg.sender;
+        newReview.review_text = review_text;
+        newReview.rate = rate;
+        //Добавить в историю
+    }
+
+    //Общие функции
+    function changeRole() public{
+        require(users[msg.sender].role != 2, "You dont have permission!");
+        if(users[msg.sender].active_role == users[msg.sender].role){
+            users[msg.sender].active_role = 2;
+        }
+        else{
+            users[msg.sender].active_role = users[msg.sender].role;
+        }
+        //Добавление в историю
+    }
+
+    function addComment(uint id_shop, uint id_review, string memory comment_text) public{
+        require(users[msg.sender].active_role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        require(id_review < shops[id_shop].reviews.length, "This review is not exist!");
+        Comment storage newComment = shops[id_shop].reviews[id_review].comments.push();
+        newComment.id_comment = shops[id_shop].reviews[id_review].comments.length - 1;
+        newComment.user = msg.sender;
+        newComment.comment_text = comment_text;
+        //Добавление в историю
+    }
+
+    function addRequest(uint id_shop) public{
+        require(users[msg.sender].role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        if(users[msg.sender].role == 1){
+            requests.push(Request(requests.length, msg.sender, 2, 0, false, false));
+        }
+        else{
+            requests.push(Request(requests.length, msg.sender, 1, id_shop, false, false));
+        }
+        //Добавление в историю
+    }
+
+
+    //Добавление оценки
+    function addScoreReview(uint id_shop, uint id_review, bool score) public{
+        require(users[msg.sender].active_role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        require(id_review < shops[id_shop].reviews.length, "This review is not exist!");
+        for(uint i = 0; i < shops[id_shop].reviews[id_review].scores.length; i++){
+            require(shops[id_shop].reviews[id_review].scores[i].user != msg.sender, "You are already scoring!");
+        }
+        shops[id_shop].reviews[id_review].scores.push(Score(shops[id_shop].reviews[id_review].scores.length, msg.sender, score));
+        //Добавить в историю
+    }
+
+    function removeScoreReview(uint id_shop, uint id_review, uint id_score) public{
+        require(users[msg.sender].active_role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        require(id_review < shops[id_shop].reviews.length, "This review is not exist!");
+        require(id_score < shops[id_shop].reviews[id_review].scores.length, "This score is not exist!");
+        require(shops[id_shop].reviews[id_review].scores[id_score].user == msg.sender, "This score is not your!");
+        for(uint i = id_score; i < shops[id_shop].reviews[id_review].scores.length; i++){
+            shops[id_shop].reviews[id_review].scores[i] = shops[id_shop].reviews[id_review].scores[i+1];
+        }
+        shops[id_shop].reviews[id_review].scores.pop();
+        //Добавление в историю
+    }
+
+    function addScoreComment(uint id_shop, uint id_review, uint id_comment, bool score) public{
+        require(users[msg.sender].active_role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        require(id_review < shops[id_shop].reviews.length, "This review is not exist!");
+        require(id_comment < shops[id_shop].reviews[id_review].comments.length, "This comment is not exist!");
+        for(uint i = 0; i < shops[id_shop].reviews[id_review].comments[id_comment].scores.length; i++){
+            require(shops[id_shop].reviews[id_review].comments[id_comment].scores[i].user != msg.sender, "You are already scoring!");
+        }
+        shops[id_shop].reviews[id_review].comments[id_comment].scores.push(Score(shops[id_shop].reviews[id_review].comments[id_comment].scores.length, msg.sender, score));
+        //Добавить в историю
+    }
+
+    function removeScoreComment(uint id_shop, uint id_review, uint id_comment, uint id_score) public{
+        require(users[msg.sender].active_role != 0, "You dont have permission!");
+        require(id_shop < shops.length, "This shop is not exist!");
+        require(id_review < shops[id_shop].reviews.length, "This review is not exist!");
+        require(id_comment < shops[id_shop].reviews[id_review].comments.length, "This comment is not exist!");
+        require(id_score < shops[id_shop].reviews[id_review].scores.length, "This score is not exist!");
+        require(shops[id_shop].reviews[id_review].comments[id_comment].scores[id_score].user == msg.sender, "This score is not your!");
+        for(uint i = id_score; i < shops[id_shop].reviews[id_review].comments[id_comment].scores.length; i++){
+            shops[id_shop].reviews[id_review].comments[id_comment].scores[i] = shops[id_shop].reviews[id_review].comments[id_comment].scores[i+1];
+        }
+        shops[id_shop].reviews[id_review].comments[id_comment].scores.pop();
+        //Добавление в историю
+    }
+}
