@@ -69,7 +69,42 @@ contract WebShops{
     Request[] public requests;
 
     constructor(){
-        users
+        users[0xFd8440D2109a1EEBEFB1803698692B5fe48d358a] = User(0, "dimon", keccak256(abi.encodePacked("1234")), "Dmiriev Dmitriy Dmitrievich", "Moscow", 0, 0);
+
+        users[0xA4cE2E7C7EaE3bC2C589493F4E6c6c9c38FA7949] = User(1, "alex", keccak256(abi.encodePacked("1234")), "Alexandrova Alexandra Alexandrovna", "Kaluga", 1, 1);
+
+        users[0x3DD95e1afaBeB2624690F624db21ddEDe96b5982] = User(2, "rus", keccak256(abi.encodePacked("1234")), "Ruslanov Ruslan Ruslanovich", "Kaluga", 2, 2);
+
+        Shop storage newShop1 = shops.push();
+        newShop1.id_shop = 1;
+        newShop1.address_shop = 0x881ceB805e4D105dc5Ff1a7403b6773353974b39;
+        newShop1.password_shop = keccak256(abi.encodePacked("1234"));
+        newShop1.city_shop = "Snt-Petersburg";
+
+        Shop storage newShop2 = shops.push();
+        newShop2.id_shop = 2;
+        newShop2.address_shop = 0x972055aFC35A0D800473a242B2E1d1D834c67593;
+        newShop2.password_shop = keccak256(abi.encodePacked("1234"));
+        newShop2.city_shop = "Dmitrov";
+
+        Shop storage newShop3 = shops.push();
+        newShop3.id_shop = 3;
+        newShop3.address_shop = 0x3372095ad3Bad8E8c2f4090E88b7E0b2DE1BD407;
+        newShop3.password_shop = keccak256(abi.encodePacked("1234"));
+        newShop3.city_shop = "Moscow";
+        newShop3.workers.push(Worker(0x3DD95e1afaBeB2624690F624db21ddEDe96b5982, true));
+
+        Shop storage newShop4 = shops.push();
+        newShop4.id_shop = 4;
+        newShop4.address_shop = 0xa4c295C3CD021Fc5cfb3304975D8D90084e8E656;
+        newShop4.password_shop = keccak256(abi.encodePacked("1234"));
+        newShop4.city_shop = "Arhangelsk";
+
+        Shop storage newShop5 = shops.push();
+        newShop5.id_shop = 5;
+        newShop5.address_shop = 0x368AA27512350A0cAF59BE4a41e535cdc57EA8cb;
+        newShop5.password_shop = keccak256(abi.encodePacked("1234"));
+        newShop5.city_shop = "Irkutsk";
     }
 
     //Полезные ретёрны
